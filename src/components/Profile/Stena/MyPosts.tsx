@@ -1,8 +1,8 @@
 import React, {ChangeEvent, LegacyRef} from "react";
 import {Post} from "./Post";
-import {ProfilePageType} from "../../../redux/state";
+import {ProfilePagePropsType, ProfilePageType} from "../../../redux/state";
 
-export const MyPosts: React.FC<ProfilePageType> = (props) => {
+export const MyPosts: React.FC<ProfilePagePropsType> = (props) => {
 
     const postsElements = props.postsData.map((el) => <Post postText={el.postText} likesCount={el.likesCount}/>)
 

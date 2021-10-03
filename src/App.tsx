@@ -11,6 +11,7 @@ import {Settings} from "./components/Settings";
 
 import {PostType} from "./components/Profile/Stena/Post";
 import {DialogItemType, MessageItemType} from "./components/DialogsPage/DialogMessageItem";
+import {StoreType} from "./redux/state";
 
 type AppPropsType = {
     postsData: Array<PostType>

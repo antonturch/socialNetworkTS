@@ -2,9 +2,9 @@ import React from "react";
 import s from "./ProfilePage.module.css"
 import {MyPosts} from "./Stena/MyPosts";
 import {ProfileInfo} from "./ProfileInfo";
-import {ProfilePageType} from "../../redux/state";
+import {ProfilePagePropsType, ProfilePageType} from "../../redux/state";
 
-export const ProfilePage: React.FC<ProfilePageType> = (props) => {
+export const ProfilePage: React.FC<ProfilePagePropsType> = (props) => {
     return (
         <div className={s.content}>
             <ProfileInfo />
