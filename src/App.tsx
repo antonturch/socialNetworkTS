@@ -11,15 +11,25 @@ import {Settings} from "./components/Settings";
 
 import {PostType} from "./components/Profile/Stena/Post";
 import {DialogItemType, MessageItemType} from "./components/DialogsPage/DialogMessageItem";
-import {StoreType} from "./redux/state";
+import {
+    ActionsType,
+    AddNewMessageType,
+    AddNewPostTextActionType,
+    AddPostActionType,
+    UpdateNewMessageTextType
+} from "./redux/state";
 
 type AppPropsType = {
     postsData: Array<PostType>
-    addPost: () => void
     dialogsData: Array<DialogItemType>
     messagesData: Array<MessageItemType>
     newPostText: string
-    addNewPostText: (newPostText: string) => void
+    addPostAC: () => AddPostActionType
+    addNewPostTextAC: (newPostText: string) => AddNewPostTextActionType
+    dispatch: (action: ActionsType) => void
+    newMessageText: string
+    updateNewMessageTextAC: (newMessageSimbol: string) => UpdateNewMessageTextType
+    addNewMessageAC: () => AddNewMessageType
 }
 
 const App = (props: AppPropsType) => {
@@ -30,11 +40,18 @@ const App = (props: AppPropsType) => {
                 <Navbar/>
                 <div className="app-wrapper-content">
                     <Route path="/profile" render={() => <ProfilePage postsData={props.postsData}
-                                                                      addPost={props.addPost}
                                                                       newPostText={props.newPostText}
-                                                                      addNewPostText={props.addNewPostText}/>}/>
+                                                                      dispatch={props.dispatch}
+                                                                      addPostAC={props.addPostAC}
+                                                                      addNewPostTextAC={props.addNewPostTextAC}
+                    />}/>
                     <Route path="/dialogs" render={() => <DialogsPage dialogsData={props.dialogsData}
-                                                                      messagesData={props.messagesData}/>}/>
+                                                                      messagesData={props.messagesData}
+                                                                      newMessageText={props.newMessageText}
+                                                                      dispatch={props.dispatch}
+                                                                      updateNewMessageTextAC={props.updateNewMessageTextAC}
+                                                                      addNewMessageAC={props.addNewMessageAC}
+                    />}/>
                     <Route path="/news" component={News}/>
                     <Route path="/music" component={Music}/>
                     <Route path="/settings" component={Settings}/>

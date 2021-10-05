@@ -8,11 +8,12 @@ export const MyPosts: React.FC<ProfilePagePropsType> = (props) => {
 
     const addNewPostText = (e: ChangeEvent<HTMLTextAreaElement>) => {
         debugger;
-        props.addNewPostText(e.currentTarget.value)
+        // @ts-ignore
+        props.dispatch(props.addNewPostTextAC(e.currentTarget.value))
     }
     const addPost = () => {
-        debugger
-        props.addPost()
+        // @ts-ignore
+        props.dispatch(props.addPostAC())
     }
 
     return (
