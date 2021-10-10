@@ -1,4 +1,24 @@
-import {ActionsType, AddNewMessageType, DialogPageType, UpdateNewMessageTextType} from "./state";
+import {ActionsType} from "./profile-reducer";
+
+export type DialogItemType = {
+    id: number
+    name: string
+}
+
+export type MessageItemType = {
+    id?:number
+    message: string
+}
+
+export type DialogPageType = {
+    dialogsData: Array<DialogItemType>
+    messagesData: Array<MessageItemType>
+    newMessageText: string
+}
+
+export type UpdateNewMessageTextType = { type: "UPDATE-NEW-MESSAGE-TEXT", newMessageSimbol: string }
+
+export type AddNewMessageType = { type: "ADD-NEW-MESSAGE" }
 
 const initialState: DialogPageType = {
     dialogsData: [
@@ -28,9 +48,7 @@ export const addNewMessageAC = (): AddNewMessageType => {
 export const dialogReducer = (state = initialState, action: ActionsType): DialogPageType => {
     switch (action.type) {
         case "UPDATE-NEW-MESSAGE-TEXT":
-            debugger
-            state.newMessageText = action.newMessageSimbol
-            return state
+            return {...state, newMessageText: action.newMessageSimbol}
         case "ADD-NEW-MESSAGE":
             if (state.newMessageText.trim() !== "") {
                 const newMessageObj = {id: 6, message: state.newMessageText}
@@ -39,7 +57,7 @@ export const dialogReducer = (state = initialState, action: ActionsType): Dialog
             } else {
                 alert("title is required")
             }
-            return state
+            return {...state}
         default:
             return state
     }

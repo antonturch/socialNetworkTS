@@ -1,35 +1,35 @@
-import {PostType} from "../components/Profile/Stena/Post";
-import {DialogItemType, MessageItemType} from "../components/DialogsPage/DialogMessageItem";
-import {profileReducer} from "./profile-reducer";
-import {dialogReducer} from "./dialog-reducer";
+import {
+    ActionsType,
+    AddNewPostTextActionType,
+    AddPostActionType,
+    ProfilePageType,
+    profileReducer
+} from "./profile-reducer";
+import {
+    AddNewMessageType, DialogItemType,
+    DialogPageType,
+    dialogReducer,
+    MessageItemType,
+    UpdateNewMessageTextType
+} from "./dialog-reducer";
 
 
-export type ProfilePageType = {
-    postsData: Array<PostType>
+export type ProfilePagePropsType = {}
+
+export type MyPostsPropsType = {
+    postsElements: Array<any>
     newPostText: string
+    addPost: () => void
+    addNewPostText: (newPostText: string) => void
 }
 
-export type ProfilePagePropsType = {
-    postsData: Array<PostType>
-    newPostText: string
-    dispatch: (action: ActionsType) => void
-    addPostAC: () => AddPostActionType
-    addNewPostTextAC: (newPostText: string) => AddNewPostTextActionType
-}
-
-export type DialogPageType = {
-    dialogsData: Array<DialogItemType>
-    messagesData: Array<MessageItemType>
-    newMessageText: string
-}
 
 export type DialogPagePropsType = {
     dialogsData: Array<DialogItemType>
     messagesData: Array<MessageItemType>
     newMessageText: string
-    dispatch: (action: ActionsType) => void
-    updateNewMessageTextAC: (newMessageSimbol: string) => UpdateNewMessageTextType
-    addNewMessageAC: () => AddNewMessageType
+    updateNewMessageText: (newMessageText: string) => void
+    addNewMessage: () => void
 }
 
 export type StoreType = {
@@ -49,20 +49,7 @@ export type StateType = {
     dialogPage: DialogPageType
 }
 
-export type AddPostActionType = {
-    type: "ADD-POST"
-}
 
-export type AddNewPostTextActionType = {
-    type: "ADD-NEW-POST-TEXT"
-    newPostText: string
-}
-
-export type UpdateNewMessageTextType = { type: "UPDATE-NEW-MESSAGE-TEXT", newMessageSimbol: string }
-
-export type AddNewMessageType = { type: "ADD-NEW-MESSAGE" }
-
-export type ActionsType = AddPostActionType | AddNewPostTextActionType | UpdateNewMessageTextType | AddNewMessageType
 export const store: StoreType = {
     _state: {
         profilePage: {

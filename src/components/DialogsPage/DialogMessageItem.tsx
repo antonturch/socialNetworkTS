@@ -1,17 +1,7 @@
 import {NavLink} from "react-router-dom";
 import s from "./DialogsPage.module.css";
 import React from "react";
-
-export type DialogItemType = {
-    id: number
-    name: string
-}
-
-export type MessageItemType = {
-    id?:number
-    message: string
-}
-
+import {DialogItemType, MessageItemType} from "../../redux/dialog-reducer";
 
 export const DialogMessageItem: React.FC<DialogItemType> = (props) => {
 

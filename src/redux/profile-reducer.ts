@@ -1,5 +1,15 @@
-import {PostType} from "../components/Profile/Stena/Post";
-import {ActionsType, AddNewPostTextActionType, AddPostActionType, ProfilePageType} from "./state";
+import {AddNewMessageType, UpdateNewMessageTextType} from "./dialog-reducer";
+
+export type PostType = {
+    id?: number
+    postText: string
+    likesCount: number
+}
+
+export type ProfilePageType = {
+    postsData: Array<PostType>
+    newPostText: string
+}
 
 const initialState: ProfilePageType = {
     postsData: [
@@ -9,6 +19,18 @@ const initialState: ProfilePageType = {
     newPostText: "",
 }
 
+export type AddPostActionType = {
+    type: "ADD-POST"
+}
+
+export type AddNewPostTextActionType = {
+    type: "ADD-NEW-POST-TEXT"
+    newPostText: string
+}
+
+export type ActionsType = AddPostActionType | AddNewPostTextActionType | UpdateNewMessageTextType | AddNewMessageType
+
+
 export const addPostAC = (): AddPostActionType => {
     return {type: "ADD-POST"}
 }
@@ -17,16 +39,16 @@ export const addNewPostTextAC = (newPostText: string): AddNewPostTextActionType 
 }
 
 export const profileReducer = (state = initialState, action: ActionsType): ProfilePageType => {
-        switch (action.type) {
-            case "ADD-POST":
-                const newPost: PostType = {id: 1, postText: state.newPostText, likesCount: 0}
-                state.postsData.push(newPost)
-                state.newPostText = ""
-                return state;
-            case "ADD-NEW-POST-TEXT":
-                state.newPostText = action.newPostText;
-                return state;
-            default:
-                return state;
-        }
+    switch (action.type) {
+        case "ADD-POST":
+            return {
+                ...state,
+                postsData: [...state.postsData, {id: 1, postText: state.newPostText, likesCount: 0}],
+                newPostText: ""
+            };
+        case "ADD-NEW-POST-TEXT":
+            return {...state, newPostText: action.newPostText};
+        default:
+            return state;
+    }
 }
