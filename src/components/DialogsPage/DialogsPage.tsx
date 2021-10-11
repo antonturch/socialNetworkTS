@@ -28,7 +28,8 @@ export const DialogsPage: React.FC<DialogPagePropsType> = ({
                 {messageElements}
             </div>
             <TextField onChange={(e) => updateNewMessageText(e.currentTarget.value)}
-                       value={newMessageText} id="filled-basic" label="Ввидете сообщение" variant="filled"/>
+                       value={newMessageText} id="filled-basic" label="Ввидете сообщение"
+                       variant="filled"/>
             <Button onClick={() => addNewMessage()} variant="outlined">Outlined</Button>
         </div>
     )

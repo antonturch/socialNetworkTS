@@ -12,5 +12,9 @@
     background-color: aqua;
 }
 
+.active-page {
+    font-weight: bold;
+    color: orange;
+}
 
 

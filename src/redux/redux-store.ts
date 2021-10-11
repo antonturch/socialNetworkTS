@@ -9,7 +9,7 @@ const rootReducer = combineReducers({
     usersPage: usersReducer,
 })
 
-type RootReducerType = typeof rootReducer;
+export type RootReducerType = typeof rootReducer;
 export type StateType = ReturnType<RootReducerType>;
 
 export const store = createStore(rootReducer)
