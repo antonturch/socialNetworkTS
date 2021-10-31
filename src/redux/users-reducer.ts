@@ -1,9 +1,13 @@
 export type UserType = {
-    id: number
-    isFollow: boolean
     name: string
-    location: LocationType
-    comment: string
+    id: number
+    uniqueUrlName: null | string
+    photos: {
+        small: null | string
+        large: null | string
+    }
+    status: null | string
+    followed: boolean
 }
 export type UsersInitStateType = {
     users: UserType[]
@@ -41,22 +45,7 @@ export type setLoadingACType = {
 }
 
 const initState: UsersInitStateType = {
-    users: [
-        {
-            id: 0,
-            isFollow: false,
-            name: "Anton",
-            location: {country: "Belarus", city: "Zhodino"},
-            comment: "I am still study right now"
-        },
-        {
-            id: 1,
-            isFollow: false,
-            name: "Anton",
-            location: {country: "Belarus", city: "Zhodino"},
-            comment: "I am still study right now"
-        },
-    ],
+    users: [],
     pageSize: 4,
     totalUsersCount: 20,
     currentPage: 1,
@@ -101,7 +90,7 @@ export const usersReducer = (state = initState,
         case "SET-CURRENT-PAGE":
             return {...state, currentPage: action.currentPage}
         case "SET-LOADING":
-            return {...state, isLoading: !action.isLoading}
+            return {...state, isLoading: action.isLoading}
         default:
             return state
     }

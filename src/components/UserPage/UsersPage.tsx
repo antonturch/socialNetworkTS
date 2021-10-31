@@ -27,6 +27,7 @@ export type UsersPresent = {
     users: UserType[]
     setFollow: (id: number, isFollow: boolean) => void
     isLoading: boolean
+    setLoader: (isLoading: boolean) => void
 }
 
 const UsersPresent: React.FC<UsersPresent> = ({
@@ -36,25 +37,30 @@ const UsersPresent: React.FC<UsersPresent> = ({
                                                   users,
                                                   setFollow,
                                                   isLoading,
+                                                  setLoader,
                                               }) => {
+    debugger
     return (
         <div>
             {isLoading ? <img src={img} alt="wait, loading"/> :
                 <div>{pagesNumber.map(el => <span key={el} onClick={() => {
                     onChangePage(el)
+                    setLoader(true)
                 }} className={el === currentPage ? "active-page" : ""}>{el}</span>)}
                     <div>
                         <button onClick={() => onChangePage(1)}>Set users</button>
                     </div>
-                    {users.map(
-                        (el: { id: number, name: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; comment: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; location: { city: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; country: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }; isFollow: any; }) =>
-                            <div key={el.id}>
-                                <div>{el.name}</div>
-                                <button
-                                    onClick={() => setFollow(el.id, el.isFollow)}>{el.isFollow ?
-                                    "Follow" :
-                                    "Unfollow"}</button>
-                            </div>)}</div>}
+                    {users.map(el =>
+                        <div key={el.id}>
+                            <div>{el.photos.small}</div>
+                            <div>{el.photos.large}</div>
+                            <div>{el.name}</div>
+                            <button
+                                onClick={() => setFollow(el.id, el.followed)}>{el.followed ?
+                                "Follow" :
+                                "Unfollow"}</button>
+                        </div>)}
+                </div>}
         </div>
     )
 }
@@ -62,13 +68,14 @@ const UsersPresent: React.FC<UsersPresent> = ({
 export class UsersPageClass extends React.Component<UsersPagePropsType, RootReducerType> {
 
     componentDidMount = () => {
-        this.props.setLoader(this.props.isLoading)
+        this.props.setLoader(true)
         axios.get<AxiosResponse | any>(
             `https://social-network.samuraijs.com/api/1.0/users?page=2&count=${this.props.pageSize}`)
             .then(response => {
                 this.props.setUsers(response.data.items, response.data.totalCount)
+                this.props.setLoader(false)
             })
-        this.props.setLoader(this.props.isLoading)
+
     }
 
     setFollow(id: number, isFollow: boolean) {
@@ -76,14 +83,15 @@ export class UsersPageClass extends React.Component<UsersPagePropsType, RootRedu
     }
 
     onChangePage = (usersPage: number) => {
-        this.props.setLoader(this.props.isLoading)
+
         this.props.setCurrentPage(usersPage)
         axios.get<any>(
             `https://social-network.samuraijs.com/api/1.0/users?page=${usersPage}&count=${this.props.pageSize}`)
             .then(response => {
                 this.props.setUsers(response.data.items, response.data.totalCount)
+                this.props.setLoader(false)
             })
-        this.props.setLoader(this.props.isLoading)
+
     }
 
     render() {
@@ -95,7 +103,8 @@ export class UsersPageClass extends React.Component<UsersPagePropsType, RootRedu
         return (
             <UsersPresent users={this.props.users} pagesNumber={pagesNumber}
                           onChangePage={this.onChangePage} currentPage={this.props.currentPage}
-                          setFollow={this.setFollow} isLoading={this.props.isLoading}/>
+                          setFollow={this.setFollow} isLoading={this.props.isLoading}
+                          setLoader={this.props.setLoader}/>
         )
     }
 }
@@ -127,5 +136,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     }
 }
 
-export const UsersPageContainer = connect(mapStateToProps, mapDispatchToProps)(UsersPageClass)
+export const UsersPageContainer = connect(mapStateToProps, {
+    setFollow: setFollowAC,
+    setUsers: setUsersAC,
+    setCurrentPage: setCurrentPageAC,
+    setLoader: setLoadingAC,
+})(UsersPageClass)
 
