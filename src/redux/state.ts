@@ -16,11 +16,6 @@ import {
 } from "./dialog-reducer";
 
 
-export type ProfilePagePropsType = {
-    setUserProfileAC: (profile: any) => SetUserProfileActionType
-    profile: ProfilePageType
-}
-
 export type MyPostsPropsType = {
     postsElements: Array<any>
     newPostText: string

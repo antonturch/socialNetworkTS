@@ -20,7 +20,7 @@ const App: React.FC<AppPropsType> = () => {
                 <Header/>
                 <Navbar/>
                 <div className="app-wrapper-content">
-                    <Route path="/profile" render={() => <ProfilePageContainer />}/>
+                    <Route path="/profile/:userId?" render={() => <ProfilePageContainer />}/>
                     <Route path="/dialogs" render={() => <DialogsPageContainer />}/>
                     <Route path="/users" render={() => <UsersPageContainer />}/>
                     <Route path="/news" component={News}/>

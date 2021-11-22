@@ -1,4 +1,5 @@
 import {AddNewMessageType, UpdateNewMessageTextType} from "./dialog-reducer";
+
 const ADD_NEW_POST_TEXT = "ADD-NEW-POST-TEXT" as const
 const SET_USER_PROFILE = "SET_USER_PROFILE" as const
 
@@ -8,10 +9,31 @@ export type PostType = {
     likesCount: number
 }
 
+export type ProfileApiType = {
+    userId: number
+    lookingForAJob: boolean
+    lookingForAJobDescription: string
+    fullName: string
+    contacts: {
+        github: string
+        vk: string
+        facebook: string
+        instagram: string
+        twitter: string
+        website: string
+        youtube: string
+        mainLink: string
+    }
+    photos: {
+        small: string
+        large: string
+    }
+}
+
 export type ProfilePageType = {
     postsData: Array<PostType>
     newPostText: string
-    profile: null | any
+    profile: ProfileApiType | null
 }
 
 const initialState: ProfilePageType = {
@@ -52,7 +74,7 @@ export const addNewPostTextAC = (newPostText: string): AddNewPostTextActionType 
     return {type: "ADD-NEW-POST-TEXT", newPostText}
 }
 
-export const setUserProfileAC = (profile: any): SetUserProfileActionType => {
+export const setUserProfileAC = (profile: ProfileApiType): SetUserProfileActionType => {
     return {type: SET_USER_PROFILE, profile}
 }
 
@@ -68,6 +90,7 @@ export const profileReducer = (state = initialState, action: ActionsType): Profi
         case ADD_NEW_POST_TEXT:
             return {...state, newPostText: action.newPostText};
         case SET_USER_PROFILE:
+            debugger
             return {...state, profile: action.profile}
         default:
             return state;

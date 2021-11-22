@@ -2,12 +2,12 @@ import {connect} from "react-redux";
 import {RootReducerType, StateType} from "../../redux/redux-store";
 import {
     setCurrentPageAC,
-    setFollowAC, setLoadingAC,
+    setFollowAC,
+    setLoadingAC,
     setUsersAC,
     UsersInitStateType,
     UserType
 } from "../../redux/users-reducer";
-import {Dispatch} from "redux";
 import React from "react";
 import axios, {AxiosResponse} from "axios";
 import "./../../App.css";
@@ -21,7 +21,7 @@ export type UsersPagePropsType = UsersInitStateType & {
     setLoader: (isLoading: boolean) => void
 }
 
-export type UsersPresent = {
+export type UsersPresentPropsType = {
     pagesNumber: number[]
     onChangePage: (usersPage: number) => void
     currentPage: number
@@ -31,7 +31,7 @@ export type UsersPresent = {
     setLoader: (isLoading: boolean) => void
 }
 
-const UsersPresent: React.FC<UsersPresent> = ({
+const UsersPresent: React.FC<UsersPresentPropsType> = ({
                                                   pagesNumber,
                                                   onChangePage,
                                                   currentPage,
