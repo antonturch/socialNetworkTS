@@ -12,6 +12,7 @@ import React from "react";
 import axios, {AxiosResponse} from "axios";
 import "./../../App.css";
 import img from "./../../Img/Preloader.gif"
+import {NavLink} from "react-router-dom";
 
 export type UsersPagePropsType = UsersInitStateType & {
     setFollow: (userId: number, isFollow: boolean) => void
@@ -51,15 +52,17 @@ const UsersPresent: React.FC<UsersPresent> = ({
                         <button onClick={() => onChangePage(1)}>Set users</button>
                     </div>
                     {users.map(el =>
-                        <div key={el.id}>
-                            <div>{el.photos.small}</div>
-                            <div>{el.photos.large}</div>
-                            <div>{el.name}</div>
-                            <button
-                                onClick={() => setFollow(el.id, el.followed)}>{el.followed ?
-                                "Follow" :
-                                "Unfollow"}</button>
-                        </div>)}
+                        <NavLink to={`/profile/${el.id}`}>
+                            <div key={el.id}>
+                                <div>{el.photos.small}</div>
+                                <div>{el.photos.large}</div>
+                                <div>{el.name}</div>
+                                <button
+                                    onClick={() => setFollow(el.id, el.followed)}>{el.followed ?
+                                    "Follow" :
+                                    "Unfollow"}</button>
+                            </div>
+                        </NavLink>)}
                 </div>}
         </div>
     )
@@ -119,22 +122,22 @@ const mapStateToProps = (state: StateType) => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        setFollow: (userId: number, isFollow: boolean) => {
-            dispatch(setFollowAC(userId, isFollow))
-        },
-        setUsers: (users: UserType[], totalUsersCount: number) => {
-            dispatch(setUsersAC(users, totalUsersCount))
-        },
-        setCurrentPage: (currentPage: number) => {
-            dispatch(setCurrentPageAC(currentPage))
-        },
-        setLoader: (isLoading: boolean) => {
-            dispatch(setLoadingAC(isLoading))
-        },
-    }
-}
+// const mapDispatchToProps = (dispatch: Dispatch) => {
+//     return {
+//         setFollow: (userId: number, isFollow: boolean) => {
+//             dispatch(setFollowAC(userId, isFollow))
+//         },
+//         setUsers: (users: UserType[], totalUsersCount: number) => {
+//             dispatch(setUsersAC(users, totalUsersCount))
+//         },
+//         setCurrentPage: (currentPage: number) => {
+//             dispatch(setCurrentPageAC(currentPage))
+//         },
+//         setLoader: (isLoading: boolean) => {
+//             dispatch(setLoadingAC(isLoading))
+//         },
+//     }
+// }
 
 export const UsersPageContainer = connect(mapStateToProps, {
     setFollow: setFollowAC,

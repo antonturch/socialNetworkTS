@@ -3,10 +3,12 @@ import {
     AddNewPostTextActionType,
     AddPostActionType,
     ProfilePageType,
-    profileReducer
+    profileReducer,
+    SetUserProfileActionType
 } from "./profile-reducer";
 import {
-    AddNewMessageType, DialogItemType,
+    AddNewMessageType,
+    DialogItemType,
     DialogPageType,
     dialogReducer,
     MessageItemType,
@@ -14,7 +16,10 @@ import {
 } from "./dialog-reducer";
 
 
-export type ProfilePagePropsType = {}
+export type ProfilePagePropsType = {
+    setUserProfileAC: (profile: any) => SetUserProfileActionType
+    profile: ProfilePageType
+}
 
 export type MyPostsPropsType = {
     postsElements: Array<any>
@@ -58,6 +63,7 @@ export const store: StoreType = {
                 {id: 2, postText: "My 1st post", likesCount: 16},
             ],
             newPostText: "",
+            profile: null
 
         },
         dialogPage: {

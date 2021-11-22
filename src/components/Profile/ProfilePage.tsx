@@ -4,10 +4,10 @@ import {ProfileInfo} from "./ProfileInfo";
 import {ProfilePagePropsType} from "../../redux/state";
 import {MyPostsContainer} from "./Stena/MyPosts";
 
-export const ProfilePage: React.FC<ProfilePagePropsType> = () => {
+export const ProfilePage: React.FC<ProfilePagePropsType> = ({profile}) => {
     return (
         <div className={s.content}>
-            <ProfileInfo/>
+            <ProfileInfo profile={profile}/>
             <MyPostsContainer/>
         </div>
     )
