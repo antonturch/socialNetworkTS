@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-import {Header} from "./components/Header/Header";
 import {Navbar} from "./components/Navbar/Navbar";
 import {DialogsPageContainer} from "./components/DialogsPage/DialogsPage";
 import {BrowserRouter, Route} from "react-router-dom";
@@ -9,6 +8,7 @@ import {Music} from "./components/Music";
 import {Settings} from "./components/Settings";
 import {UsersPageContainer} from "./components/UserPage/UsersPage";
 import {ProfilePageContainer} from "./components/Profile/ProfileContainer";
+import {HeaderConnect} from "./components/Header/HeaderContainer";
 
 
 type AppPropsType = {}
@@ -17,7 +17,7 @@ const App: React.FC<AppPropsType> = () => {
     return (
         <BrowserRouter>
             <div className="App">
-                <Header/>
+                <HeaderConnect/>
                 <Navbar/>
                 <div className="app-wrapper-content">
                     <Route path="/profile/:userId?" render={() => <ProfilePageContainer />}/>
