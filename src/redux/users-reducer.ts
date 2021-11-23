@@ -52,13 +52,12 @@ const initState: UsersInitStateType = {
     isLoading: false
 }
 
-export const setFollowAC = (userId: number, isFollow: boolean): setFollowACType => {
-    return {
+export const setFollowAC = (userId: number, isFollow: boolean): setFollowACType => ({
         type: "SET-FOLLOW",
         userId,
         isFollow
     }
-}
+)
 
 export const setUsersAC = (users: UserType[], totalUsersCount: number): setUsersACType => ({
     type: "SET-USERS",
@@ -80,7 +79,7 @@ export const usersReducer = (state = initState,
             return {
                 ...state, users: state.users.map(el => {
                     if (el.id === action.userId) {
-                        return {...el, isFollow: !action.isFollow}
+                        return {...el, followed: !action.isFollow}
                     }
                     return el
                 })

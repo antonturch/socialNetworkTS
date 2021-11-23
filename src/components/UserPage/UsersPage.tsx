@@ -31,62 +31,23 @@ export type UsersPresentPropsType = {
     setLoader: (isLoading: boolean) => void
 }
 
-const UsersPresent: React.FC<UsersPresentPropsType> = ({
-                                                  pagesNumber,
-                                                  onChangePage,
-                                                  currentPage,
-                                                  users,
-                                                  setFollow,
-                                                  isLoading,
-                                                  setLoader,
-                                              }) => {
-    debugger
-    return (
-        <div>
-            {isLoading ? <img src={img} alt="wait, loading"/> :
-                <div>{pagesNumber.map(el => <span key={el} onClick={() => {
-                    onChangePage(el)
-                    setLoader(true)
-                }} className={el === currentPage ? "active-page" : ""}>{el}</span>)}
-                    <div>
-                        <button onClick={() => onChangePage(1)}>Set users</button>
-                    </div>
-                    {users.map(el =>
-                        <NavLink to={`/profile/${el.id}`}>
-                            <div key={el.id}>
-                                <div>{el.photos.small}</div>
-                                <div>{el.photos.large}</div>
-                                <div>{el.name}</div>
-                                <button
-                                    onClick={() => setFollow(el.id, el.followed)}>{el.followed ?
-                                    "Follow" :
-                                    "Unfollow"}</button>
-                            </div>
-                        </NavLink>)}
-                </div>}
-        </div>
-    )
-}
-
 export class UsersPageClass extends React.Component<UsersPagePropsType, RootReducerType> {
 
     componentDidMount = () => {
         this.props.setLoader(true)
         axios.get<AxiosResponse | any>(
-            `https://social-network.samuraijs.com/api/1.0/users?page=2&count=${this.props.pageSize}`)
+            `https://social-network.samuraijs.com/api/1.0/users?page=2&count=${this.props.pageSize}`, {withCredentials: true})
             .then(response => {
                 this.props.setUsers(response.data.items, response.data.totalCount)
                 this.props.setLoader(false)
             })
-
     }
 
-    setFollow(id: number, isFollow: boolean) {
+    setFollow = (id: number, isFollow: boolean) => {
         this.props.setFollow(id, isFollow)
     }
 
     onChangePage = (usersPage: number) => {
-
         this.props.setCurrentPage(usersPage)
         axios.get<any>(
             `https://social-network.samuraijs.com/api/1.0/users?page=${usersPage}&count=${this.props.pageSize}`)
@@ -94,7 +55,6 @@ export class UsersPageClass extends React.Component<UsersPagePropsType, RootRedu
                 this.props.setUsers(response.data.items, response.data.totalCount)
                 this.props.setLoader(false)
             })
-
     }
 
     render() {
@@ -110,6 +70,75 @@ export class UsersPageClass extends React.Component<UsersPagePropsType, RootRedu
                           setLoader={this.props.setLoader}/>
         )
     }
+}
+
+const UsersPresent: React.FC<UsersPresentPropsType> = ({
+                                                           pagesNumber,
+                                                           onChangePage,
+                                                           currentPage,
+                                                           users,
+                                                           setFollow,
+                                                           isLoading,
+                                                           setLoader,
+                                                       }) => {
+    return (
+        <div>
+            {isLoading ? <img src={img} alt="wait, loading"/> :
+                <div>{pagesNumber.map(el => <span key={el} onClick={() => {
+                    onChangePage(el)
+                    setLoader(true)
+                }} className={el === currentPage ? "active-page" : ""}>{el}</span>)}
+                    <div>
+                        <button onClick={() => onChangePage(1)}>Set users</button>
+                    </div>
+                    {users.map(el =>
+                        <div key={el.id}>
+                            <NavLink to={`/profile/${el.id}`}>
+                                <div>
+                                    <div>{el.photos.small}</div>
+                                    <div>{el.photos.large}</div>
+                                    <div>{el.name}</div>
+                                </div>
+                            </NavLink>
+                            <button
+                                onClick={() => {
+                                    el.followed ?
+                                        axios.delete(
+                                            `https://social-network.samuraijs.com/api/1.0/follow/${el.id}`,
+                                            {
+                                                withCredentials: true,
+                                                headers: {
+                                                    "api-key": "cf073426-4174-4c42-a07f-d5b89d961d16"
+                                                }
+                                            })
+                                            .then(res => {
+                                                // @ts-ignore
+                                                if (res.data.resultCode === 0) {
+                                                    setFollow(el.id, el.followed)
+                                                }
+                                            })
+                                        : axios.post(
+                                            `https://social-network.samuraijs.com/api/1.0/follow/${el.id}`,
+                                            {}, {
+                                                withCredentials: true,
+                                                headers: {
+                                                    "api-key": "cf073426-4174-4c42-a07f-d5b89d961d16"
+                                                }
+                                            })
+                                            .then(res => {
+                                                // @ts-ignore
+                                                if (res.data.resultCode === 0) {
+                                                    setFollow(el.id, el.followed)
+                                                }
+                                            })
+                                }}>{el.followed ?
+                                "Follow" :
+                                "Unfollow"}</button>
+                        </div>
+                    )}
+                </div>}
+        </div>
+    )
 }
 
 const mapStateToProps = (state: StateType) => {

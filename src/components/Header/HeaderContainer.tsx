@@ -17,7 +17,7 @@ export class HeaderContainer extends React.Component<HeaderContainerPropsType, R
         axios.get("https://social-network.samuraijs.com/api/1.0/auth/me", {withCredentials: true})
             .then(res => {
                 // @ts-ignore
-                if (res.data.resultCode === 0) {
+                if (this.props.auth.isAuth) {
                     // @ts-ignore
                     this.props.setUserData(res.data.data.id, res.data.data.email, res.data.data.login)
                 }

@@ -9,6 +9,7 @@ export type AuthStateType = {
     userId: string
     email: string
     login: string
+    isAuth: boolean
     isFetching: boolean
 }
 
@@ -16,6 +17,7 @@ const initState: AuthStateType = {
     userId: "",
     email: "",
     login: "",
+    isAuth: true,
     isFetching: true,
 }
 
@@ -30,8 +32,7 @@ export const setUserDataAC = (userId: string, email: string, login: string): set
 export const authReducer = (state = initState, action: AuthActionsType) => {
     switch (action.type) {
         case SET_USER_DATA:
-            debugger
-            return {...state, ...action.data}
+            return {...state, ...action.data, isAuth: true}
         default:
             return state
     }
