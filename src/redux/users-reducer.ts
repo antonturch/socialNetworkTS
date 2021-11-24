@@ -1,3 +1,5 @@
+const SET_FOLLOWING_IN_PROGRESS = "SET_FOLLOWING_IN_PROGRESS" as const
+
 export type UserType = {
     name: string
     id: number
@@ -15,6 +17,7 @@ export type UsersInitStateType = {
     totalUsersCount: number
     currentPage: number
     isLoading: boolean
+    followingInProgress: []
 }
 
 export type LocationType = {
@@ -49,8 +52,21 @@ const initState: UsersInitStateType = {
     pageSize: 4,
     totalUsersCount: 20,
     currentPage: 1,
-    isLoading: false
+    isLoading: false,
+    followingInProgress: [],
 }
+
+type setFollowingInProgressType = {
+    type: "SET_FOLLOWING_IN_PROGRESS"
+    userId: string
+    isLoading: boolean
+}
+
+export const setFollowingInProgressAC = (userId: number, isLoading: boolean): setFollowingInProgressType => ({
+    type: SET_FOLLOWING_IN_PROGRESS,
+    userId,
+    isLoading,
+})
 
 export const setFollowAC = (userId: number, isFollow: boolean): setFollowACType => ({
         type: "SET-FOLLOW",
@@ -73,7 +89,7 @@ export const setCurrentPageAC = (currentPage: number): setCurrentPageACType => (
 export const setLoadingAC = (isLoading: boolean): setLoadingACType => ({type: "SET-LOADING", isLoading})
 
 export const usersReducer = (state = initState,
-                             action: setFollowACType | setUsersACType | setCurrentPageACType | setLoadingACType) => {
+                             action: setFollowingInProgressType | setFollowACType | setUsersACType | setCurrentPageACType | setLoadingACType) => {
     switch (action.type) {
         case "SET-FOLLOW":
             return {
@@ -90,6 +106,8 @@ export const usersReducer = (state = initState,
             return {...state, currentPage: action.currentPage}
         case "SET-LOADING":
             return {...state, isLoading: action.isLoading}
+        case SET_FOLLOWING_IN_PROGRESS:
+            return {...state}
         default:
             return state
     }
