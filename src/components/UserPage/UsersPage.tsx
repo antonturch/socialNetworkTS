@@ -9,10 +9,11 @@ import {
     UserType
 } from "../../redux/users-reducer";
 import React from "react";
-import axios, {AxiosResponse} from "axios";
+import axios from "axios";
 import "./../../App.css";
 import img from "./../../Img/Preloader.gif"
 import {NavLink} from "react-router-dom";
+import {API} from "../../api/api";
 
 export type UsersPagePropsType = UsersInitStateType & {
     setFollow: (userId: number, isFollow: boolean) => void
@@ -35,10 +36,10 @@ export class UsersPageClass extends React.Component<UsersPagePropsType, RootRedu
 
     componentDidMount = () => {
         this.props.setLoader(true)
-        axios.get<AxiosResponse | any>(
-            `https://social-network.samuraijs.com/api/1.0/users?page=2&count=${this.props.pageSize}`, {withCredentials: true})
+        // @ts-ignore
+        API.getUsers(this.props.currentPage, this.props.pageSize)
             .then(response => {
-                this.props.setUsers(response.data.items, response.data.totalCount)
+                this.props.setUsers(response.items, response.totalCount)
                 this.props.setLoader(false)
             })
     }
@@ -49,10 +50,9 @@ export class UsersPageClass extends React.Component<UsersPagePropsType, RootRedu
 
     onChangePage = (usersPage: number) => {
         this.props.setCurrentPage(usersPage)
-        axios.get<any>(
-            `https://social-network.samuraijs.com/api/1.0/users?page=${usersPage}&count=${this.props.pageSize}`)
+        API.getUsers(usersPage, this.props.pageSize)
             .then(response => {
-                this.props.setUsers(response.data.items, response.data.totalCount)
+                this.props.setUsers(response.items, response.totalCount)
                 this.props.setLoader(false)
             })
     }
@@ -103,31 +103,17 @@ const UsersPresent: React.FC<UsersPresentPropsType> = ({
                             <button
                                 onClick={() => {
                                     el.followed ?
-                                        axios.delete(
-                                            `https://social-network.samuraijs.com/api/1.0/follow/${el.id}`,
-                                            {
-                                                withCredentials: true,
-                                                headers: {
-                                                    "api-key": "cf073426-4174-4c42-a07f-d5b89d961d16"
-                                                }
-                                            })
+                                        API.unFollow(el.id)
                                             .then(res => {
                                                 // @ts-ignore
-                                                if (res.data.resultCode === 0) {
+                                                if (res.resultCode === 0) {
                                                     setFollow(el.id, el.followed)
                                                 }
                                             })
-                                        : axios.post(
-                                            `https://social-network.samuraijs.com/api/1.0/follow/${el.id}`,
-                                            {}, {
-                                                withCredentials: true,
-                                                headers: {
-                                                    "api-key": "cf073426-4174-4c42-a07f-d5b89d961d16"
-                                                }
-                                            })
+                                        : API.follow(el.id)
                                             .then(res => {
                                                 // @ts-ignore
-                                                if (res.data.resultCode === 0) {
+                                                if (res.resultCode === 0) {
                                                     setFollow(el.id, el.followed)
                                                 }
                                             })
