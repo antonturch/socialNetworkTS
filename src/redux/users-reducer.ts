@@ -17,7 +17,7 @@ export type UsersInitStateType = {
     totalUsersCount: number
     currentPage: number
     isLoading: boolean
-    followingInProgress: []
+    followingInProgress: number[]
 }
 
 export type LocationType = {
@@ -58,11 +58,12 @@ const initState: UsersInitStateType = {
 
 type setFollowingInProgressType = {
     type: "SET_FOLLOWING_IN_PROGRESS"
-    userId: string
+    userId: number
     isLoading: boolean
 }
 
-export const setFollowingInProgressAC = (userId: number, isLoading: boolean): setFollowingInProgressType => ({
+export const setFollowingInProgressAC = (userId: number,
+                                         isLoading: boolean): setFollowingInProgressType => ({
     type: SET_FOLLOWING_IN_PROGRESS,
     userId,
     isLoading,
@@ -107,7 +108,11 @@ export const usersReducer = (state = initState,
         case "SET-LOADING":
             return {...state, isLoading: action.isLoading}
         case SET_FOLLOWING_IN_PROGRESS:
-            return {...state}
+            return {
+                ...state,
+                followingInProgress: action.isLoading ? [...state.followingInProgress, action.userId]
+                    : state.followingInProgress.filter(el => el !== action.userId)
+            }
         default:
             return state
     }

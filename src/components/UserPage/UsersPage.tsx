@@ -19,7 +19,7 @@ export type UsersPagePropsType = UsersInitStateType & {
     setUsers: (users: UserType[], totalUsersCount: number) => void
     setCurrentPage: (currentPage: number) => void
     setLoader: (isLoading: boolean) => void
-    followingInProgress: []
+    followingInProgress: number[]
     setFollowingInProgress: (userId: number, isLoading: boolean) => void
 }
 
@@ -31,7 +31,7 @@ export type UsersPresentPropsType = {
     setFollow: (id: number, isFollow: boolean) => void
     isLoading: boolean
     setLoader: (isLoading: boolean) => void
-    followingInProgress: []
+    followingInProgress: number[]
     setFollowingInProgress: (userId: number, isLoading: boolean) => void
 }
 
@@ -116,7 +116,7 @@ const UsersPresent: React.FC<UsersPresentPropsType> = ({
                                                     // @ts-ignore
                                                     if (res.resultCode === 0) {
                                                         setFollow(el.id, el.followed)
-                                                        setFollowingInProgress(false)
+                                                        setFollowingInProgress(el.id, false)
                                                     }
                                                 })
                                             : API.follow(el.id)
@@ -124,7 +124,7 @@ const UsersPresent: React.FC<UsersPresentPropsType> = ({
                                                     // @ts-ignore
                                                     if (res.resultCode === 0) {
                                                         setFollow(el.id, el.followed)
-                                                        setFollowingInProgress(false)
+                                                        setFollowingInProgress(el.id, false)
                                                     }
                                                 })
                                     }}>{el.followed ?
