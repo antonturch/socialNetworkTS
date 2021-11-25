@@ -10,12 +10,10 @@ import {Dispatch} from "redux";
 class ProfileContainer extends React.Component<PropsType, RootReducerType> {
 
     componentDidMount() {
-        debugger
         let userId = this.props.match.params.userId ? this.props.match.params.userId : "2"
         axios.get<any>(
             `https://social-network.samuraijs.com/api/1.0/profile/${userId}`)
             .then(response => {
-                debugger
                 this.props.setUserProfile(response.data)
             })
     }

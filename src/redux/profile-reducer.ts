@@ -90,7 +90,6 @@ export const profileReducer = (state = initialState, action: ActionsType): Profi
         case ADD_NEW_POST_TEXT:
             return {...state, newPostText: action.newPostText};
         case SET_USER_PROFILE:
-            debugger
             return {...state, profile: action.profile}
         default:
             return state;

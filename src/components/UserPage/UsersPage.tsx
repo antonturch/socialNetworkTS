@@ -1,6 +1,7 @@
 import {connect} from "react-redux";
 import {RootReducerType, StateType} from "../../redux/redux-store";
 import {
+    getUsersThunk,
     setCurrentPageAC,
     setFollowAC, setFollowingInProgressAC,
     setLoadingAC,
@@ -21,6 +22,7 @@ export type UsersPagePropsType = UsersInitStateType & {
     setLoader: (isLoading: boolean) => void
     followingInProgress: number[]
     setFollowingInProgress: (userId: number, isLoading: boolean) => void
+    getUsersThunk: (currentPage: number, pageSize: number) => void
 }
 
 export type UsersPresentPropsType = {
@@ -38,13 +40,7 @@ export type UsersPresentPropsType = {
 export class UsersPageClass extends React.Component<UsersPagePropsType, RootReducerType> {
 
     componentDidMount = () => {
-        this.props.setLoader(true)
-        // @ts-ignore
-        API.getUsers(this.props.currentPage, this.props.pageSize)
-            .then(response => {
-                this.props.setUsers(response.items, response.totalCount)
-                this.props.setLoader(false)
-            })
+        this.props.getUsersThunk(1, 8)
     }
 
     setFollow = (id: number, isFollow: boolean) => {
@@ -53,11 +49,7 @@ export class UsersPageClass extends React.Component<UsersPagePropsType, RootRedu
 
     onChangePage = (usersPage: number) => {
         this.props.setCurrentPage(usersPage)
-        API.getUsers(usersPage, this.props.pageSize)
-            .then(response => {
-                this.props.setUsers(response.items, response.totalCount)
-                this.props.setLoader(false)
-            })
+        this.props.getUsersThunk(usersPage, 5)
     }
 
     render() {
@@ -171,5 +163,6 @@ export const UsersPageContainer = connect(mapStateToProps, {
     setCurrentPage: setCurrentPageAC,
     setLoader: setLoadingAC,
     setFollowingInProgress: setFollowingInProgressAC,
+    getUsersThunk: getUsersThunk,
 })(UsersPageClass)
 

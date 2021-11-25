@@ -1,3 +1,6 @@
+import {Dispatch} from "redux";
+import {API} from "../api/api";
+
 const SET_FOLLOWING_IN_PROGRESS = "SET_FOLLOWING_IN_PROGRESS" as const
 
 export type UserType = {
@@ -49,7 +52,7 @@ export type setLoadingACType = {
 
 const initState: UsersInitStateType = {
     users: [],
-    pageSize: 4,
+    pageSize: 8,
     totalUsersCount: 20,
     currentPage: 1,
     isLoading: false,
@@ -117,3 +120,15 @@ export const usersReducer = (state = initState,
             return state
     }
 }
+
+export const getUsersThunk = (currentPage: number, pageSize: number) => {
+  return (dispatch: Dispatch) => {
+      dispatch(setLoadingAC(true))
+      API.getUsers(currentPage, pageSize)
+          .then(data => {
+              dispatch(setUsersAC(data.items, data.totalCount))
+              dispatch(setLoadingAC(false))
+          })
+  }
+}
+
