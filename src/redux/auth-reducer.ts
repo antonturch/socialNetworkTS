@@ -20,7 +20,7 @@ const initState: AuthStateType = {
     userId: "",
     email: "",
     login: "",
-    isAuth: true,
+    isAuth: false,
     isFetching: true,
 }
 
@@ -35,7 +35,8 @@ export const setUserDataAC = (userId: string, email: string, login: string): set
 export const authReducer = (state = initState, action: AuthActionsType) => {
     switch (action.type) {
         case SET_USER_DATA:
-            return {...state, ...action.data, isAuth: true}
+            debugger
+            return {...state, ...action.data, isAuth: action.data.login ? true : false}
         default:
             return state
     }
@@ -45,7 +46,7 @@ export const getLoginThunk = () => {
     return (dispatch: Dispatch) => {
         authAPI.getLogin()
             .then(res => {
-                if (initState.isAuth) {
+                if (!initState.isAuth) {
                     // @ts-ignore
                     dispatch(setUserDataAC(res.data.id, res.data.email, res.data.login))
                 }

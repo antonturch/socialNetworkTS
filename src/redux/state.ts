@@ -3,8 +3,7 @@ import {
     AddNewPostTextActionType,
     AddPostActionType,
     ProfilePageType,
-    profileReducer,
-    SetUserProfileActionType
+    profileReducer
 } from "./profile-reducer";
 import {
     AddNewMessageType,
@@ -30,6 +29,7 @@ export type DialogPagePropsType = {
     newMessageText: string
     updateNewMessageText: (newMessageText: string) => void
     addNewMessage: () => void
+    isAuth: boolean
 }
 
 export type StoreType = {

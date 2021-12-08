@@ -13,14 +13,18 @@ class ProfileContainer extends React.Component<PropsType, RootReducerType> {
     }
 
     render() {
+
         return (
             <ProfilePage profile={this.props.profile}/>
         );
     }
 }
 
+
 const mapStateToProps = (state: StateType): MapStateToPropsType => ({
-    profile: state.profilePage.profile
+    profile: state.profilePage.profile,
+    // @ts-ignore
+    auth: state.auth.isAuth
 })
 
 type PathParamsType = {
@@ -33,6 +37,7 @@ export type ProfilePageContainerPropsType = MapStateToPropsType & MapDispatchToP
 
 type MapStateToPropsType = {
     profile: ProfileApiType | null
+    isAuth: boolean
 }
 
 type MapDispatchToPropsType = {

@@ -7,18 +7,26 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 import {addNewMessageAC, updateNewMessageTextAC} from "../../redux/dialog-reducer";
 import {StateType} from "../../redux/redux-store";
+import {Redirect} from "react-router-dom";
 
 
 export const DialogsPage: React.FC<DialogPagePropsType> = ({
-                                                               dialogsData, messagesData, newMessageText
-                                                               , updateNewMessageText, addNewMessage
+                                                               dialogsData,
+                                                               messagesData,
+                                                               newMessageText
+                                                               ,
+                                                               updateNewMessageText,
+                                                               addNewMessage,
+                                                               isAuth
                                                            }) => {
 
 
     const dialogElements = dialogsData.map((el) => <DialogMessageItem id={el.id} name={el.name}/>);
 
     const messageElements = messagesData.map((el) => <MessageItem message={el.message}/>);
-
+    if (isAuth === false) {
+        return <Redirect to={"/login"}/>
+    }
     return (
         <div className={s.dialogPage}>
             <div className={s.dialogs}>
@@ -35,11 +43,13 @@ export const DialogsPage: React.FC<DialogPagePropsType> = ({
     )
 }
 
+
 const mapStateToProps = (state: StateType) => {
     return {
         dialogsData: state.dialogPage.dialogsData,
         messagesData: state.dialogPage.messagesData,
-        newMessageText: state.dialogPage.newMessageText
+        newMessageText: state.dialogPage.newMessageText,
+        isAuth: state.auth.isAuth
     }
 }
 

@@ -13,7 +13,8 @@ type HeaderContainerPropsType = {
 export class HeaderContainer extends React.Component<HeaderContainerPropsType, RootReducerType> {
 
     componentDidMount() {
-        this.props.getLoginThunk()
+        if (!this.props.auth.isAuth)
+        {this.props.getLoginThunk()}
         // authAPI.getLogin()
         //     .then(res => {
         //         // @ts-ignore
