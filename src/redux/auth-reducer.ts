@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {API} from "../api/api";
+import {authAPI} from "../api/api";
 
 const SET_USER_DATA = "SET_USER_DATA" as const
 
@@ -24,7 +24,7 @@ const initState: AuthStateType = {
     isFetching: true,
 }
 
-type AuthActionsType = any
+type AuthActionsType = setUserDataAСType
 
 export const setUserDataAC = (userId: string, email: string, login: string): setUserDataAСType => ({
     type: SET_USER_DATA, data: {
@@ -43,12 +43,11 @@ export const authReducer = (state = initState, action: AuthActionsType) => {
 
 export const getLoginThunk = () => {
     return (dispatch: Dispatch) => {
-        debugger
-        API.getLogin()
+        authAPI.getLogin()
             .then(res => {
                 if (initState.isAuth) {
                     // @ts-ignore
-                    dispatch(setUserDataAC(res.data.data.id, res.data.data.email, res.data.data.login))
+                    dispatch(setUserDataAC(res.data.id, res.data.email, res.data.login))
                 }
             })
     }

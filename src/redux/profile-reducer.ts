@@ -1,7 +1,10 @@
 import {AddNewMessageType, UpdateNewMessageTextType} from "./dialog-reducer";
+import {Dispatch} from "redux";
+import {API} from "../api/api";
 
 const ADD_NEW_POST_TEXT = "ADD-NEW-POST-TEXT" as const
 const SET_USER_PROFILE = "SET_USER_PROFILE" as const
+
 
 export type PostType = {
     id?: number
@@ -93,5 +96,16 @@ export const profileReducer = (state = initialState, action: ActionsType): Profi
             return {...state, profile: action.profile}
         default:
             return state;
+    }
+}
+
+export const getProfileThunk = (userId: string) => {
+    debugger
+    return (dispatch: Dispatch) => {
+        API.getProfile(userId)
+            // @ts-ignore
+            .then(res => {
+                debugger
+                dispatch(setUserProfileAC(res.data))})
     }
 }

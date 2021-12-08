@@ -1,21 +1,15 @@
 import React from "react";
 import {ProfilePage} from "./ProfilePage";
 import {RootReducerType, StateType} from "../../redux/redux-store";
-import axios from "axios";
 import {connect} from "react-redux";
-import {ProfileApiType, setUserProfileAC} from "../../redux/profile-reducer";
+import {getProfileThunk, ProfileApiType} from "../../redux/profile-reducer";
 import {RouteComponentProps, withRouter} from "react-router-dom";
-import {Dispatch} from "redux";
 
 class ProfileContainer extends React.Component<PropsType, RootReducerType> {
 
     componentDidMount() {
         let userId = this.props.match.params.userId ? this.props.match.params.userId : "2"
-        axios.get<any>(
-            `https://social-network.samuraijs.com/api/1.0/profile/${userId}`)
-            .then(response => {
-                this.props.setUserProfile(response.data)
-            })
+        this.props.getProfileThunk(userId)
     }
 
     render() {
@@ -42,18 +36,20 @@ type MapStateToPropsType = {
 }
 
 type MapDispatchToPropsType = {
-    setUserProfile: (profile: ProfileApiType) => void
+    // setUserProfile: (profile: ProfileApiType) => void
+    getProfileThunk: (userId: string) => void
 }
 
-const MapDispatchToProps = (dispatch: Dispatch) => {
-   return {
-       setUserProfile: (profile: ProfileApiType) => {
-        dispatch(setUserProfileAC(profile))
-    }
-   }
-}
+// const MapDispatchToProps = (dispatch: Dispatch) => {
+//     // return {
+//     //     setUserProfile: (profile: ProfileApiType) => {
+//     //         dispatch(setUserProfileAC(profile))
+//     //     },
+//     //     getProfileThunk
+//     // }
+// }
 
 let ProfileContainerWithRouter = withRouter(ProfileContainer);
 
-export const ProfilePageContainer = connect(mapStateToProps, MapDispatchToProps)(
+export const ProfilePageContainer = connect(mapStateToProps,{getProfileThunk})(
     ProfileContainerWithRouter)
