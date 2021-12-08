@@ -122,13 +122,38 @@ export const usersReducer = (state = initState,
 }
 
 export const getUsersThunk = (currentPage: number, pageSize: number) => {
-  return (dispatch: Dispatch) => {
-      dispatch(setLoadingAC(true))
-      API.getUsers(currentPage, pageSize)
-          .then(data => {
-              dispatch(setUsersAC(data.items, data.totalCount))
-              dispatch(setLoadingAC(false))
-          })
-  }
+    return (dispatch: Dispatch) => {
+        dispatch(setLoadingAC(true))
+        API.getUsers(currentPage, pageSize)
+            .then(data => {
+                    dispatch(setUsersAC(data.items, data.totalCount))
+                    dispatch(setLoadingAC(false))
+                }
+            )
+    }
+}
+
+export const followThunk = (userId: number, isFollow: boolean) => {
+    return (dispatch: Dispatch) => {
+        setFollowingInProgressAC(userId, true)
+        isFollow ?
+            API.follow(userId)
+                .then(res => {
+                    // @ts-ignore
+                    if (res.resultCode === 0) {
+                        dispatch(setFollowAC(userId, isFollow))
+                        dispatch(setFollowingInProgressAC(userId, false))
+                    }
+                })
+            :
+            API.unFollow(userId)
+                .then(res => {
+                    // @ts-ignore
+                    if (res.resultCode === 0) {
+                        dispatch(setFollowAC(userId, isFollow))
+                        dispatch(setFollowingInProgressAC(userId, false))
+                    }
+                })
+    }
 }
 

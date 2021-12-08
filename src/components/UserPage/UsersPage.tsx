@@ -1,9 +1,11 @@
 import {connect} from "react-redux";
 import {RootReducerType, StateType} from "../../redux/redux-store";
 import {
+    followThunk,
     getUsersThunk,
     setCurrentPageAC,
-    setFollowAC, setFollowingInProgressAC,
+    setFollowAC,
+    setFollowingInProgressAC,
     setLoadingAC,
     setUsersAC,
     UsersInitStateType,
@@ -13,7 +15,6 @@ import React from "react";
 import "./../../App.css";
 import img from "./../../Img/Preloader.gif"
 import {NavLink} from "react-router-dom";
-import {API} from "../../api/api";
 
 export type UsersPagePropsType = UsersInitStateType & {
     setFollow: (userId: number, isFollow: boolean) => void
@@ -100,26 +101,7 @@ const UsersPresent: React.FC<UsersPresentPropsType> = ({
                                 </div>
                             </NavLink>
                             <button disabled={followingInProgress.some(elem => elem === el.id)}
-                                    onClick={() => {
-                                        setFollowingInProgress(el.id, true)
-                                        el.followed ?
-                                            API.unFollow(el.id)
-                                                .then(res => {
-                                                    // @ts-ignore
-                                                    if (res.resultCode === 0) {
-                                                        setFollow(el.id, el.followed)
-                                                        setFollowingInProgress(el.id, false)
-                                                    }
-                                                })
-                                            : API.follow(el.id)
-                                                .then(res => {
-                                                    // @ts-ignore
-                                                    if (res.resultCode === 0) {
-                                                        setFollow(el.id, el.followed)
-                                                        setFollowingInProgress(el.id, false)
-                                                    }
-                                                })
-                                    }}>{el.followed ?
+                                    onClick={() => followThunk(el.id, el.followed)}>{el.followed ?
                                 "Follow" :
                                 "Unfollow"}</button>
                         </div>
@@ -164,5 +146,6 @@ export const UsersPageContainer = connect(mapStateToProps, {
     setLoader: setLoadingAC,
     setFollowingInProgress: setFollowingInProgressAC,
     getUsersThunk: getUsersThunk,
+    followThunk: followThunk,
 })(UsersPageClass)
 
