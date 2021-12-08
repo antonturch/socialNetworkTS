@@ -4,8 +4,6 @@ import {
     followThunk,
     getUsersThunk,
     setCurrentPageAC,
-    setFollowAC,
-    setFollowingInProgressAC,
     setLoadingAC,
     setUsersAC,
     UsersInitStateType,
@@ -17,13 +15,12 @@ import img from "./../../Img/Preloader.gif"
 import {NavLink} from "react-router-dom";
 
 export type UsersPagePropsType = UsersInitStateType & {
-    setFollow: (userId: number, isFollow: boolean) => void
     setUsers: (users: UserType[], totalUsersCount: number) => void
     setCurrentPage: (currentPage: number) => void
     setLoader: (isLoading: boolean) => void
     followingInProgress: number[]
-    setFollowingInProgress: (userId: number, isLoading: boolean) => void
     getUsersThunk: (currentPage: number, pageSize: number) => void
+    followThunk: (userId: number, isFollow: boolean) => void
 }
 
 export type UsersPresentPropsType = {
@@ -31,21 +28,16 @@ export type UsersPresentPropsType = {
     onChangePage: (usersPage: number) => void
     currentPage: number
     users: UserType[]
-    setFollow: (id: number, isFollow: boolean) => void
     isLoading: boolean
     setLoader: (isLoading: boolean) => void
     followingInProgress: number[]
-    setFollowingInProgress: (userId: number, isLoading: boolean) => void
+    followThunk: (userId: number, isFollow: boolean) => void
 }
 
 export class UsersPageClass extends React.Component<UsersPagePropsType, RootReducerType> {
 
     componentDidMount = () => {
         this.props.getUsersThunk(1, 8)
-    }
-
-    setFollow = (id: number, isFollow: boolean) => {
-        this.props.setFollow(id, isFollow)
     }
 
     onChangePage = (usersPage: number) => {
@@ -62,10 +54,10 @@ export class UsersPageClass extends React.Component<UsersPagePropsType, RootRedu
         return (
             <UsersPresent users={this.props.users} pagesNumber={pagesNumber}
                           onChangePage={this.onChangePage} currentPage={this.props.currentPage}
-                          setFollow={this.setFollow} isLoading={this.props.isLoading}
+                          isLoading={this.props.isLoading}
                           setLoader={this.props.setLoader}
                           followingInProgress={this.props.followingInProgress}
-                          setFollowingInProgress={this.props.setFollowingInProgress}/>
+                          followThunk={this.props.followThunk}/>
         )
     }
 }
@@ -75,11 +67,10 @@ const UsersPresent: React.FC<UsersPresentPropsType> = ({
                                                            onChangePage,
                                                            currentPage,
                                                            users,
-                                                           setFollow,
                                                            isLoading,
                                                            setLoader,
                                                            followingInProgress,
-                                                           setFollowingInProgress,
+                                                           followThunk,
                                                        }) => {
     return (
         <div>
@@ -140,11 +131,9 @@ const mapStateToProps = (state: StateType) => {
 // }
 
 export const UsersPageContainer = connect(mapStateToProps, {
-    setFollow: setFollowAC,
     setUsers: setUsersAC,
     setCurrentPage: setCurrentPageAC,
     setLoader: setLoadingAC,
-    setFollowingInProgress: setFollowingInProgressAC,
     getUsersThunk: getUsersThunk,
     followThunk: followThunk,
 })(UsersPageClass)
