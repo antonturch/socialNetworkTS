@@ -1,10 +1,11 @@
-import React from "react";
+import React, {ComponentType} from "react";
 import {ProfilePage} from "./ProfilePage";
 import {RootReducerType, StateType} from "../../redux/redux-store";
 import {connect} from "react-redux";
 import {getProfileThunk, ProfileApiType} from "../../redux/profile-reducer";
 import {RouteComponentProps, withRouter} from "react-router-dom";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+import {compose} from "redux";
 
 type PathParamsType = {
     userId: string
@@ -28,7 +29,7 @@ class ProfileContainer extends React.Component<PropsType, RootReducerType> {
 
     render() {
         return (
-            <ProfilePage profile={this.props.profile} />
+            <ProfilePage profile={this.props.profile}/>
         );
     }
 }
@@ -37,8 +38,10 @@ const mapStateToProps = (state: StateType): MapStateToPropsType => ({
     profile: state.profilePage.profile,
 })
 
-let ProfileContainerWithRouter = withRouter(withAuthRedirect(ProfileContainer));
-
-export const ProfilePageContainer = connect(mapStateToProps, {getProfileThunk})(
-    ProfileContainerWithRouter)
-
+// export const ProfilePageContainer = connect(mapStateToProps, {getProfileThunk})(
+//     withRouter(withAuthRedirect(ProfileContainer)))
+export const ProfilePageContainer = compose<ComponentType>(
+    connect(mapStateToProps, {getProfileThunk}),
+    withRouter,
+    withAuthRedirect,
+)(ProfileContainer)

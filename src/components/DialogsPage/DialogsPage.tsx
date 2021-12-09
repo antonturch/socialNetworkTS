@@ -1,10 +1,10 @@
-import React from "react";
+import React, {ComponentType} from "react";
 import s from "./DialogsPage.module.css"
 import {DialogMessageItem, MessageItem} from "./DialogMessageItem";
 import {DialogPagePropsType} from "../../redux/state";
 import {Button, TextField} from "@material-ui/core";
 import {connect} from "react-redux";
-import {Dispatch} from "redux";
+import {compose, Dispatch} from "redux";
 import {addNewMessageAC, updateNewMessageTextAC} from "../../redux/dialog-reducer";
 import {StateType} from "../../redux/redux-store";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
@@ -59,5 +59,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     }
 }
 
-export const DialogsPageContainer = connect(mapStateToProps, mapDispatchToProps)(
-    withAuthRedirect(DialogsPage))
+export const DialogsPageContainer = compose<ComponentType>(
+    connect(mapStateToProps, mapDispatchToProps),
+    withAuthRedirect,
+    )(DialogsPage)

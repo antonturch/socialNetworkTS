@@ -9,11 +9,12 @@ import {
     UsersInitStateType,
     UserType
 } from "../../redux/users-reducer";
-import React from "react";
+import React, {ComponentType} from "react";
 import "./../../App.css";
 import img from "./../../Img/Preloader.gif"
 import {NavLink} from "react-router-dom";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+import {compose} from "redux";
 
 export type UsersPagePropsType = UsersInitStateType & {
     setUsers: (users: UserType[], totalUsersCount: number) => void
@@ -114,30 +115,16 @@ const mapStateToProps = (state: StateType) => {
     }
 }
 
-// const mapDispatchToProps = (dispatch: Dispatch) => {
-//     return {
-//         setFollow: (userId: number, isFollow: boolean) => {
-//             dispatch(setFollowAC(userId, isFollow))
-//         },
-//         setUsers: (users: UserType[], totalUsersCount: number) => {
-//             dispatch(setUsersAC(users, totalUsersCount))
-//         },
-//         setCurrentPage: (currentPage: number) => {
-//             dispatch(setCurrentPageAC(currentPage))
-//         },
-//         setLoader: (isLoading: boolean) => {
-//             dispatch(setLoadingAC(isLoading))
-//         },
-//     }
-// }
 
+export const UsersPageContainer = compose<ComponentType>(
+    connect(mapStateToProps, {
+        setUsers: setUsersAC,
+        setCurrentPage: setCurrentPageAC,
+        setLoader: setLoadingAC,
+        getUsersThunk: getUsersThunk,
+        followThunk: followThunk,
+    }),
+    withAuthRedirect
+)(UsersPageClass)
 
-
-export const UsersPageContainer = connect(mapStateToProps, {
-    setUsers: setUsersAC,
-    setCurrentPage: setCurrentPageAC,
-    setLoader: setLoadingAC,
-    getUsersThunk: getUsersThunk,
-    followThunk: followThunk,
-})(withAuthRedirect(UsersPageClass))
 
