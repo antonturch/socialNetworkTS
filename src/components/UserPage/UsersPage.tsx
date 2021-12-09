@@ -13,6 +13,7 @@ import React from "react";
 import "./../../App.css";
 import img from "./../../Img/Preloader.gif"
 import {NavLink} from "react-router-dom";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 
 export type UsersPagePropsType = UsersInitStateType & {
     setUsers: (users: UserType[], totalUsersCount: number) => void
@@ -130,11 +131,13 @@ const mapStateToProps = (state: StateType) => {
 //     }
 // }
 
+
+
 export const UsersPageContainer = connect(mapStateToProps, {
     setUsers: setUsersAC,
     setCurrentPage: setCurrentPageAC,
     setLoader: setLoadingAC,
     getUsersThunk: getUsersThunk,
     followThunk: followThunk,
-})(UsersPageClass)
+})(withAuthRedirect(UsersPageClass))
 

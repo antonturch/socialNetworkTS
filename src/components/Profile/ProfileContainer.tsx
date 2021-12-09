@@ -4,6 +4,20 @@ import {RootReducerType, StateType} from "../../redux/redux-store";
 import {connect} from "react-redux";
 import {getProfileThunk, ProfileApiType} from "../../redux/profile-reducer";
 import {RouteComponentProps, withRouter} from "react-router-dom";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+
+type PathParamsType = {
+    userId: string
+}
+type PropsType = RouteComponentProps<PathParamsType> & ProfilePageContainerPropsType
+export type ProfilePageContainerPropsType = MapStateToPropsType & MapDispatchToPropsType
+type MapStateToPropsType = {
+    profile: ProfileApiType | null
+}
+type MapDispatchToPropsType = {
+    getProfileThunk: (userId: string) => void
+}
+
 
 class ProfileContainer extends React.Component<PropsType, RootReducerType> {
 
@@ -13,48 +27,18 @@ class ProfileContainer extends React.Component<PropsType, RootReducerType> {
     }
 
     render() {
-
         return (
-            <ProfilePage profile={this.props.profile}/>
+            <ProfilePage profile={this.props.profile} />
         );
     }
 }
 
-
 const mapStateToProps = (state: StateType): MapStateToPropsType => ({
     profile: state.profilePage.profile,
-    // @ts-ignore
-    auth: state.auth.isAuth
 })
 
-type PathParamsType = {
-    userId: string
-}
+let ProfileContainerWithRouter = withRouter(withAuthRedirect(ProfileContainer));
 
-type PropsType = RouteComponentProps<PathParamsType> & ProfilePageContainerPropsType
-
-export type ProfilePageContainerPropsType = MapStateToPropsType & MapDispatchToPropsType
-
-type MapStateToPropsType = {
-    profile: ProfileApiType | null
-    isAuth: boolean
-}
-
-type MapDispatchToPropsType = {
-    // setUserProfile: (profile: ProfileApiType) => void
-    getProfileThunk: (userId: string) => void
-}
-
-// const MapDispatchToProps = (dispatch: Dispatch) => {
-//     // return {
-//     //     setUserProfile: (profile: ProfileApiType) => {
-//     //         dispatch(setUserProfileAC(profile))
-//     //     },
-//     //     getProfileThunk
-//     // }
-// }
-
-let ProfileContainerWithRouter = withRouter(ProfileContainer);
-
-export const ProfilePageContainer = connect(mapStateToProps,{getProfileThunk})(
+export const ProfilePageContainer = connect(mapStateToProps, {getProfileThunk})(
     ProfileContainerWithRouter)
+

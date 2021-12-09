@@ -7,26 +7,22 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 import {addNewMessageAC, updateNewMessageTextAC} from "../../redux/dialog-reducer";
 import {StateType} from "../../redux/redux-store";
-import {Redirect} from "react-router-dom";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 
 
 export const DialogsPage: React.FC<DialogPagePropsType> = ({
                                                                dialogsData,
                                                                messagesData,
-                                                               newMessageText
-                                                               ,
+                                                               newMessageText,
                                                                updateNewMessageText,
                                                                addNewMessage,
-                                                               isAuth
                                                            }) => {
 
 
     const dialogElements = dialogsData.map((el) => <DialogMessageItem id={el.id} name={el.name}/>);
 
     const messageElements = messagesData.map((el) => <MessageItem message={el.message}/>);
-    if (isAuth === false) {
-        return <Redirect to={"/login"}/>
-    }
+
     return (
         <div className={s.dialogPage}>
             <div className={s.dialogs}>
@@ -36,7 +32,7 @@ export const DialogsPage: React.FC<DialogPagePropsType> = ({
                 {messageElements}
             </div>
             <TextField onChange={(e) => updateNewMessageText(e.currentTarget.value)}
-                       value={newMessageText} id="filled-basic" label="Ввидете сообщение"
+                       value={newMessageText} id="filled-basic" label="Введите сообщение"
                        variant="filled"/>
             <Button onClick={() => addNewMessage()} variant="outlined">Outlined</Button>
         </div>
@@ -49,7 +45,6 @@ const mapStateToProps = (state: StateType) => {
         dialogsData: state.dialogPage.dialogsData,
         messagesData: state.dialogPage.messagesData,
         newMessageText: state.dialogPage.newMessageText,
-        isAuth: state.auth.isAuth
     }
 }
 
@@ -64,4 +59,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     }
 }
 
-export const DialogsPageContainer = connect(mapStateToProps, mapDispatchToProps)(DialogsPage)
+export const DialogsPageContainer = connect(mapStateToProps, mapDispatchToProps)(
+    withAuthRedirect(DialogsPage))
