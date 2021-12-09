@@ -4,7 +4,6 @@ import {RootReducerType, StateType} from "../../redux/redux-store";
 import {connect} from "react-redux";
 import {getProfileThunk, ProfileApiType} from "../../redux/profile-reducer";
 import {RouteComponentProps, withRouter} from "react-router-dom";
-import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
 
 type PathParamsType = {
@@ -43,5 +42,5 @@ const mapStateToProps = (state: StateType): MapStateToPropsType => ({
 export const ProfilePageContainer = compose<ComponentType>(
     connect(mapStateToProps, {getProfileThunk}),
     withRouter,
-    withAuthRedirect,
+    // withAuthRedirect,
 )(ProfileContainer)

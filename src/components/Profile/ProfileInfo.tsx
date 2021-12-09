@@ -1,6 +1,7 @@
 import React from "react";
 import s from "./ProfilePage.module.css"
 import {ProfileApiType} from "../../redux/profile-reducer";
+import {ProfileStatus} from "./ProfileStatus";
 
 type ProfileInfoPropsType = {
     profile: ProfileApiType | null
@@ -17,6 +18,7 @@ export const ProfileInfo: React.FC<ProfileInfoPropsType> = ({profile}) => {
             <div>
                 <img src={profile.photos.large} alt=""/>
                 ava + discription
+                <ProfileStatus/>
             </div>
         </div>
     )
