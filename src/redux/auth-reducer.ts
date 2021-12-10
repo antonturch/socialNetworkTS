@@ -35,7 +35,6 @@ export const setUserDataAC = (userId: string, email: string, login: string): set
 export const authReducer = (state = initState, action: AuthActionsType) => {
     switch (action.type) {
         case SET_USER_DATA:
-            debugger
             return {...state, ...action.data, isAuth: action.data.login ? true : false}
         default:
             return state

@@ -58,7 +58,8 @@ export const store: StoreType = {
                 {id: 2, postText: "My 1st post", likesCount: 16},
             ],
             newPostText: "",
-            profile: null
+            profile: null,
+            status: null,
 
         },
         dialogPage: {
@@ -88,7 +89,7 @@ export const store: StoreType = {
         return this._state
     },
     addPostAC(): AddPostActionType {
-        return {type: "ADD-POST"}
+        return {type: "ADD_POST"}
     },
     dispatch(action) {
         this._state.profilePage = profileReducer(this._state.profilePage, action)
@@ -96,7 +97,7 @@ export const store: StoreType = {
         this._callSubscriber()
     },
     addNewPostTextAC(newPostText: string): AddNewPostTextActionType {
-        return {type: "ADD-NEW-POST-TEXT", newPostText}
+        return {type: "ADD_NEW_POST_TEXT", newPostText}
     },
     updateNewMessageTextAC(newMessageSimbol: string): UpdateNewMessageTextType {
         return {type: "UPDATE-NEW-MESSAGE-TEXT", newMessageSimbol}

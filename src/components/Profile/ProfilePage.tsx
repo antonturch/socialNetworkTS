@@ -6,12 +6,14 @@ import {ProfileApiType} from "../../redux/profile-reducer";
 
 type ProfilePagePropsType = {
     profile: ProfileApiType | null
+    status: string | null
+    updateStatusThunk: (newStatus: string) => void
 }
 
-export const ProfilePage: React.FC<ProfilePagePropsType> = ({profile}) => {
+export const ProfilePage: React.FC<ProfilePagePropsType> = ({profile, status,updateStatusThunk}) => {
     return (
         <div className={s.content}>
-            <ProfileInfo profile={profile} />
+            <ProfileInfo profile={profile} status={status} updateStatusThunk={updateStatusThunk}/>
             <MyPostsContainer/>
         </div>
     )

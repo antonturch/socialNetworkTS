@@ -5,9 +5,11 @@ import {ProfileStatus} from "./ProfileStatus";
 
 type ProfileInfoPropsType = {
     profile: ProfileApiType | null
+    status: string | null
+    updateStatusThunk: (newStatus: string) => void
 }
 
-export const ProfileInfo: React.FC<ProfileInfoPropsType> = ({profile}) => {
+export const ProfileInfo: React.FC<ProfileInfoPropsType> = ({profile, status,updateStatusThunk}) => {
     if (!profile) {
         return <></>
     }
@@ -18,7 +20,7 @@ export const ProfileInfo: React.FC<ProfileInfoPropsType> = ({profile}) => {
             <div>
                 <img src={profile.photos.large} alt=""/>
                 ava + discription
-                <ProfileStatus/>
+                <ProfileStatus status={status} updateStatusThunk={updateStatusThunk}/>
             </div>
         </div>
     )

@@ -1,15 +1,28 @@
-import {Component} from "react";
+import {ChangeEvent, Component} from "react";
+import {RootReducerType} from "../../redux/redux-store";
 
-export class ProfileStatus extends Component {
+type ProfileStatusType = {
+    status: string | null
+    updateStatusThunk: (newStatus: string) => void
+}
+
+export class ProfileStatus extends Component<ProfileStatusType, RootReducerType> {
     state = {
-        editMode: false
+        editMode: false,
+        status: this.props.status ? this.props.status : "Set new status"
     }
 
-    activateEditMode() {
+    activateEditMode = () => {
         this.setState({editMode: true})
     }
-    deActivateEditMode() {
+
+    deActivateEditMode = () => {
         this.setState({editMode: false})
+        this.props.updateStatusThunk(this.state.status)
+    }
+
+    updateStatusInput = (e: ChangeEvent<HTMLInputElement>) => {
+        this.setState({status: e.currentTarget.value})
     }
 
     render() {
@@ -17,11 +30,13 @@ export class ProfileStatus extends Component {
             <>
                 {this.state.editMode ?
                     <div>
-                        <input type="text" autoFocus onBlur={this.deActivateEditMode.bind(this)}/>
+                        <input type="text" autoFocus value={this.state.status}
+                               onChange={this.updateStatusInput}
+                               onBlur={this.deActivateEditMode}/>
                     </div>
                     :
                     <div>
-                        <span onDoubleClick={this.activateEditMode.bind(this)}>STATUS</span>
+                        <span onDoubleClick={this.activateEditMode}>{this.props.status}</span>
                     </div>
                 }
             </>
