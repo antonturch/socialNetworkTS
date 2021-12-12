@@ -5,12 +5,8 @@ import {addNewPostTextAC, addPostAC} from "../../../redux/profile-reducer";
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
 import {StateType} from "../../../redux/redux-store";
-import {AddPostFormRedux} from "../../common/Form";
-import {Login} from "../../Login/Login";
+import {AddItemForm, FormSubmitDataType} from "../../common/Form";
 
-export type formDataType = {
-    login: string
-}
 
 export const MyPosts: React.FC<MyPostsPropsType> = ({
                                                         postsElements,
@@ -21,16 +17,18 @@ export const MyPosts: React.FC<MyPostsPropsType> = ({
     const postsElements1 = postsElements.map(
         (el) => <Post postText={el.postText} likesCount={el.likesCount}/>)
 
+    const onSubmitHandler = (newItemTextForm: FormSubmitDataType) => addPost(newItemTextForm)
+
     return (
         <div>
             <h3>my posts</h3>
-            <Login/>
-            <AddPostFormRedux/>
-            <textarea value={newPostText} placeholder={"Write to me smth"}
-                      onChange={(e) => addNewPostText(e.currentTarget.value)}/>
-            <div>
-                <button onClick={addPost}>Add post</button>
-            </div>
+            <AddItemForm onSubmit={onSubmitHandler}
+                         name={"newItemText"} placeholder={"Tell what's happened"}/>
+            {/*<textarea value={newPostText} placeholder={"Write to me smth"}*/}
+            {/*          onChange={(e) => addNewPostText(e.currentTarget.value)}/>*/}
+            {/*<div>*/}
+            {/*    <button onClick={addPost}>Add post</button>*/}
+            {/*</div>*/}
             {postsElements1}
         </div>
     )
@@ -45,8 +43,8 @@ const mapStateToProps = (state: StateType) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        addPost: () => {
-            dispatch(addPostAC())
+        addPost: (newItemTextForm: FormSubmitDataType) => {
+            dispatch(addPostAC(newItemTextForm))
         },
         addNewPostText: (newPostTest: string) => {
             dispatch(addNewPostTextAC(newPostTest))

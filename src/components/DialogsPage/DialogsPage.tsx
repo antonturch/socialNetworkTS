@@ -2,12 +2,12 @@ import React, {ComponentType} from "react";
 import s from "./DialogsPage.module.css"
 import {DialogMessageItem, MessageItem} from "./DialogMessageItem";
 import {DialogPagePropsType} from "../../redux/state";
-import {Button, TextField} from "@material-ui/core";
 import {connect} from "react-redux";
 import {compose, Dispatch} from "redux";
 import {addNewMessageAC, updateNewMessageTextAC} from "../../redux/dialog-reducer";
 import {StateType} from "../../redux/redux-store";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+import {AddItemForm, FormSubmitDataType} from "../common/Form";
 
 
 export const DialogsPage: React.FC<DialogPagePropsType> = ({
@@ -22,7 +22,7 @@ export const DialogsPage: React.FC<DialogPagePropsType> = ({
     const dialogElements = dialogsData.map((el) => <DialogMessageItem id={el.id} name={el.name}/>);
 
     const messageElements = messagesData.map((el) => <MessageItem message={el.message}/>);
-
+    const onSubmitHandler = (newItemTextForm: FormSubmitDataType) => addNewMessage(newItemTextForm)
     return (
         <div className={s.dialogPage}>
             <div className={s.dialogs}>
@@ -31,10 +31,11 @@ export const DialogsPage: React.FC<DialogPagePropsType> = ({
             <div className={s.messages}>
                 {messageElements}
             </div>
-            <TextField onChange={(e) => updateNewMessageText(e.currentTarget.value)}
-                       value={newMessageText} id="filled-basic" label="Введите сообщение"
-                       variant="filled"/>
-            <Button onClick={() => addNewMessage()} variant="outlined">Outlined</Button>
+            <AddItemForm onSubmit={onSubmitHandler}
+                         name={"newItemText"} placeholder={"Write smth to smbd"}/>
+            {/*<TextField onChange={(e) => updateNewMessageText(e.currentTarget.value)}*/}
+            {/*           value={newMessageText} id="filled-basic" label="Введите сообщение"*/}
+            {/*           variant="filled"/>*/}
         </div>
     )
 }
@@ -53,8 +54,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         updateNewMessageText: (newMessageText: string) => {
             dispatch(updateNewMessageTextAC(newMessageText))
         },
-        addNewMessage: () => {
-            dispatch(addNewMessageAC())
+        addNewMessage: (newItemTextForm: FormSubmitDataType) => {
+            dispatch(addNewMessageAC(newItemTextForm))
         }
     }
 }

@@ -1,6 +1,7 @@
 import {AddNewMessageType, UpdateNewMessageTextType} from "./dialog-reducer";
 import {Dispatch} from "redux";
 import {profileAPI} from "../api/api";
+import {FormSubmitDataType} from "../components/common/Form";
 
 const ADD_POST = "ADD_POST" as const
 const ADD_NEW_POST_TEXT = "ADD_NEW_POST_TEXT" as const
@@ -52,8 +53,10 @@ const initialState: ProfilePageType = {
     status: null,
 }
 
+
 export type AddPostActionType = {
     type: "ADD_POST"
+    newItemTextForm: FormSubmitDataType
 }
 
 export type AddNewPostTextActionType = {
@@ -80,8 +83,8 @@ export type ActionsType =
     | SetUserStatusACType
 
 
-export const addPostAC = (): AddPostActionType => {
-    return {type: ADD_POST}
+export const addPostAC = (newItemTextForm: FormSubmitDataType): AddPostActionType => {
+    return {type: ADD_POST, newItemTextForm}
 }
 export const addNewPostTextAC = (newPostText: string): AddNewPostTextActionType => {
     return {type: ADD_NEW_POST_TEXT, newPostText}
@@ -100,7 +103,9 @@ export const profileReducer = (state = initialState, action: ActionsType): Profi
         case ADD_POST:
             return {
                 ...state,
-                postsData: [...state.postsData, {id: 1, postText: state.newPostText, likesCount: 0}],
+                // postsData: [...state.postsData, {id: 1, postText: state.newPostText, likesCount: 0}],
+                postsData: [...state.postsData,
+                    {id: 1, postText: action.newItemTextForm.newItemText, likesCount: 0}],
                 newPostText: ""
             };
         case ADD_NEW_POST_TEXT:
@@ -131,13 +136,13 @@ export const getUserStatusThunk = (userId: string) => {
 }
 
 export const updateUserStatusThunk = (newStatus: string) => {
-  return (dispatch: Dispatch) => {
-      profileAPI.updateStatus(newStatus)
-          .then(res => {
-              //@ts-ignore
-              if (res.data.resultCode === 0) {
-                  dispatch(setUserStatusAC(newStatus))
-              }
-          })
-  }
+    return (dispatch: Dispatch) => {
+        profileAPI.updateStatus(newStatus)
+            .then(res => {
+                //@ts-ignore
+                if (res.data.resultCode === 0) {
+                    dispatch(setUserStatusAC(newStatus))
+                }
+            })
+    }
 }

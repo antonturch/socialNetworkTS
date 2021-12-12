@@ -1,4 +1,5 @@
 import {ActionsType} from "./profile-reducer";
+import {FormSubmitDataType} from "../components/common/Form";
 
 export type DialogItemType = {
     id: number
@@ -6,7 +7,7 @@ export type DialogItemType = {
 }
 
 export type MessageItemType = {
-    id?:number
+    id?: number
     message: string
 }
 
@@ -18,7 +19,10 @@ export type DialogPageType = {
 
 export type UpdateNewMessageTextType = { type: "UPDATE-NEW-MESSAGE-TEXT", newMessageSimbol: string }
 
-export type AddNewMessageType = { type: "ADD-NEW-MESSAGE" }
+export type AddNewMessageType = {
+    type: "ADD-NEW-MESSAGE"
+    newItemTextForm: FormSubmitDataType
+}
 
 const initialState: DialogPageType = {
     dialogsData: [
@@ -29,11 +33,11 @@ const initialState: DialogPageType = {
         {id: 5, name: "Виталя"},
     ],
     messagesData: [
-        {id: 1, message: "Ку"},
-        {id: 2, message: "Хай"},
-        {id: 3, message: "Даров"},
-        {id: 4, message: "Привет"},
-        {id: 5, message: "Приветсткую Мусье"},
+        {id: 0, message: "Ку"},
+        {id: 1, message: "Хай"},
+        {id: 2, message: "Даров"},
+        {id: 3, message: "Привет"},
+        {id: 4, message: "Приветсткую Мусье"},
     ],
     newMessageText: "",
 }
@@ -41,8 +45,8 @@ const initialState: DialogPageType = {
 export const updateNewMessageTextAC = (newMessageSimbol: string): UpdateNewMessageTextType => {
     return {type: "UPDATE-NEW-MESSAGE-TEXT", newMessageSimbol}
 }
-export const addNewMessageAC = (): AddNewMessageType => {
-    return {type: "ADD-NEW-MESSAGE"}
+export const addNewMessageAC = (newItemTextForm: FormSubmitDataType): AddNewMessageType => {
+    return {type: "ADD-NEW-MESSAGE", newItemTextForm}
 }
 
 export const dialogReducer = (state = initialState, action: ActionsType): DialogPageType => {
@@ -50,14 +54,19 @@ export const dialogReducer = (state = initialState, action: ActionsType): Dialog
         case "UPDATE-NEW-MESSAGE-TEXT":
             return {...state, newMessageText: action.newMessageSimbol}
         case "ADD-NEW-MESSAGE":
-            if (state.newMessageText.trim() !== "") {
-                const newMessageObj = {id: 6, message: state.newMessageText}
-                state.messagesData.push(newMessageObj)
-                state.newMessageText = ""
+            if (action.newItemTextForm.newItemText === "") {
+                alert("Please enter your message")
+                return state
             } else {
-                alert("title is required")
+                const stateCopy = {...state}
+                const newMessageObj = {
+                    id: state.messagesData.length,
+                    message: action.newItemTextForm.newItemText
+                }
+                stateCopy.messagesData = [...state.messagesData, newMessageObj]
+                return {...stateCopy}
             }
-            return {...state}
+
         default:
             return state
     }
