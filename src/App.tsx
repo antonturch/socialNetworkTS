@@ -9,7 +9,7 @@ import {Settings} from "./components/Settings";
 import {UsersPageContainer} from "./components/UserPage/UsersPage";
 import {ProfilePageContainer} from "./components/Profile/ProfileContainer";
 import {HeaderConnect} from "./components/Header/HeaderContainer";
-import {Login} from "./components/Login/Login";
+import {LoginContainer} from "./components/Login/Login";
 
 
 type AppPropsType = {}
@@ -27,7 +27,7 @@ const App: React.FC<AppPropsType> = () => {
                     <Route path="/news" component={News}/>
                     <Route path="/music" component={Music}/>
                     <Route path="/settings" component={Settings}/>
-                    <Route path="/login" component={Login}/>
+                    <Route path="/login" component={LoginContainer}/>
                 </div>
             </div>
         </BrowserRouter>
