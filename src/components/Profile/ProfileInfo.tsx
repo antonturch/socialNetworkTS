@@ -5,7 +5,7 @@ import {ProfileStatus} from "./ProfileStatus";
 
 type ProfileInfoPropsType = {
     profile: ProfileApiType | null
-    status: string | null
+    status: string
     updateStatusThunk: (newStatus: string) => void
 }
 

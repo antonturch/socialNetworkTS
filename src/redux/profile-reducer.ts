@@ -40,7 +40,7 @@ export type ProfilePageType = {
     postsData: Array<PostType>
     newPostText: string
     profile: ProfileApiType | null
-    status: string | null
+    status: string
 }
 
 const initialState: ProfilePageType = {
@@ -50,7 +50,7 @@ const initialState: ProfilePageType = {
     ],
     newPostText: "",
     profile: null,
-    status: null,
+    status: "",
 }
 
 
@@ -71,7 +71,7 @@ export type SetUserProfileActionType = {
 
 type SetUserStatusACType = {
     type: "SET_USER_STATUS"
-    status: string | null
+    status: string
 }
 
 export type ActionsType =
@@ -93,7 +93,7 @@ export const addNewPostTextAC = (newPostText: string): AddNewPostTextActionType 
 export const setUserProfileAC = (profile: ProfileApiType): SetUserProfileActionType => {
     return {type: SET_USER_PROFILE, profile}
 }
-export const setUserStatusAC = (status: string | null): SetUserStatusACType => {
+export const setUserStatusAC = (status: string): SetUserStatusACType => {
     return {type: SET_USER_STATUS, status}
 }
 

@@ -18,7 +18,7 @@ type PropsType = RouteComponentProps<PathParamsType> & ProfilePageContainerProps
 export type ProfilePageContainerPropsType = MapStateToPropsType & MapDispatchToPropsType
 type MapStateToPropsType = {
     profile: ProfileApiType | null
-    status: string | null
+    status: string
     authorizedUserId: string | null
 }
 type MapDispatchToPropsType = {

@@ -6,7 +6,7 @@ import {ProfileApiType} from "../../redux/profile-reducer";
 
 type ProfilePagePropsType = {
     profile: ProfileApiType | null
-    status: string | null
+    status: string
     updateStatusThunk: (newStatus: string) => void
 }
 
