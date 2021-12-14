@@ -1,5 +1,6 @@
 import {Dispatch} from "redux";
 import {authAPI} from "../api/api";
+import {stopSubmit} from "redux-form";
 
 const SET_USER_DATA = "SET_USER_DATA" as const
 
@@ -44,6 +45,7 @@ export const authReducer = (state = initState, action: AuthActionsType) => {
 }
 
 export const getLoginThunk = () => {
+
     return (dispatch: Dispatch) => {
         authAPI.getLogin()
             .then(res => {
@@ -64,6 +66,10 @@ export const loginThunk = (email: string, password: string, rememberMe: boolean)
                 if (res.data.resultCode === 0) {
                     // @ts-ignore
                     dispatch(getLoginThunk())
+                } else {
+                    // @ts-ignore
+                    const errorMessage = res.data.messages[0]
+                    dispatch(stopSubmit("login", {_error: errorMessage}))
                 }
             })
     }

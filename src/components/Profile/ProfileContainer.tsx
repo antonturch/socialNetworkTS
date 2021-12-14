@@ -8,21 +8,22 @@ import {
     ProfileApiType,
     updateUserStatusThunk
 } from "../../redux/profile-reducer";
-import {RouteComponentProps, withRouter} from "react-router-dom";
+import {Redirect, RouteComponentProps, withRouter} from "react-router-dom";
 import {compose} from "redux";
 
 type PathParamsType = {
-    userId: string
+    userIdUrl: string
 }
 type PropsType = RouteComponentProps<PathParamsType> & ProfilePageContainerPropsType
 export type ProfilePageContainerPropsType = MapStateToPropsType & MapDispatchToPropsType
 type MapStateToPropsType = {
     profile: ProfileApiType | null
     status: string | null
+    authorizedUserId: string | null
 }
 type MapDispatchToPropsType = {
-    getProfileThunk: (userId: string) => void
-    getUserStatusThunk: (userId: string) => void
+    getProfileThunk: (userId: string | null) => void
+    getUserStatusThunk: (userId: string | null) => void
     updateStatusThunk: (newStatus: string) => void
 }
 
@@ -30,7 +31,7 @@ type MapDispatchToPropsType = {
 class ProfileContainer extends React.Component<PropsType, RootReducerType> {
 
     componentDidMount() {
-        let userId = this.props.match.params.userId ? this.props.match.params.userId : "2"
+        let userId = this.props.match.params.userIdUrl ? this.props.match.params.userIdUrl : this.props.authorizedUserId
         this.props.getUserStatusThunk(userId)
         this.props.getProfileThunk(userId)
     }
@@ -43,6 +44,9 @@ class ProfileContainer extends React.Component<PropsType, RootReducerType> {
     }
 
     render() {
+        if (!this.props.authorizedUserId && !this.props.match.params.userIdUrl) {
+            return <Redirect to={"/login"}/>
+        }
         return (
             <ProfilePage profile={this.props.profile} status={this.props.status}
                          updateStatusThunk={this.props.updateStatusThunk}/>
@@ -53,6 +57,7 @@ class ProfileContainer extends React.Component<PropsType, RootReducerType> {
 const mapStateToProps = (state: StateType): MapStateToPropsType => ({
     profile: state.profilePage.profile,
     status: state.profilePage.status,
+    authorizedUserId: state.auth.userId,
 })
 
 // export const ProfilePageContainer = connect(mapStateToProps, {getProfileThunk})(

@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import {loginThunk, logOutThunks} from "../../redux/auth-reducer";
 import {StateType} from "../../redux/redux-store";
 import {Redirect} from "react-router-dom";
+import styles from "./Login.module.css"
 
 const maxLengthTenSymbols = maxLengthCreator(20)
 const minLengthOneSymbol = minLengthCreator(1)
@@ -37,7 +38,7 @@ export const Login: FC<LoginPropsType> = ({loginThunk, isAuth}) => {
     )
 }
 
-const LoginForm: FC<InjectedFormProps<FormDataType>> = ({handleSubmit}) => {
+const LoginForm: FC<InjectedFormProps<FormDataType>> = ({handleSubmit, error}) => {
 
     return (
         <form onSubmit={handleSubmit}>
@@ -50,6 +51,9 @@ const LoginForm: FC<InjectedFormProps<FormDataType>> = ({handleSubmit}) => {
             </div>
             <div>
                 <Field type="checkbox" name={"rememberMe"} component={Input}/>Remember me
+            </div>
+            <div className={styles.formSummaryError}>
+                {error}
             </div>
             <button>Submit</button>
         </form>
