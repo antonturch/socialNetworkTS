@@ -11,7 +11,7 @@ import {
 } from "../../redux/users-reducer";
 import React, {ComponentType} from "react";
 import "./../../App.css";
-import img from "./../../Img/Preloader.gif"
+import img from "../common/Img/Preloader.gif"
 import {NavLink} from "react-router-dom";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";

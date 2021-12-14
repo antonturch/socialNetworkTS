@@ -27,8 +27,8 @@ const initState: AuthStateType = {
 
 type AuthActionsType = setUserDataAСType
 
-export const setUserDataAC = (userId: string | null, email: string | null, login: string | null,
-                              isAuth: boolean): setUserDataAСType => ({
+export const setAuthUserData = (userId: string | null, email: string | null, login: string | null,
+                                isAuth: boolean): setUserDataAСType => ({
     type: SET_USER_DATA,
     payload: {
         userId, email, login, isAuth
@@ -47,12 +47,12 @@ export const authReducer = (state = initState, action: AuthActionsType) => {
 export const getLoginThunk = () => {
 
     return (dispatch: Dispatch) => {
-        authAPI.getLogin()
+        return authAPI.getLogin()
             .then(res => {
                 // @ts-ignore
                 if (!initState.isAuth && res.resultCode === 0) {
                     // @ts-ignore
-                    dispatch(setUserDataAC(res.data.id, res.data.email, res.data.login, true))
+                    dispatch(setAuthUserData(res.data.id, res.data.email, res.data.login, true))
                 }
             })
     }
@@ -81,7 +81,7 @@ export const logOutThunks = () => {
             .then(res => {
                 // @ts-ignore
                 if (res.data.resultCode === 0) {
-                    dispatch(setUserDataAC(null, null, null, false))
+                    dispatch(setAuthUserData(null, null, null, false))
                 }
             })
     }

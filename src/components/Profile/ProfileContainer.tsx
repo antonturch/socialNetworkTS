@@ -32,8 +32,8 @@ class ProfileContainer extends React.Component<PropsType, RootReducerType> {
 
     componentDidMount() {
         let userId = this.props.match.params.userIdUrl ? this.props.match.params.userIdUrl : this.props.authorizedUserId
-        this.props.getUserStatusThunk(userId)
         this.props.getProfileThunk(userId)
+        this.props.getUserStatusThunk(userId)
     }
 
     componentDidUpdate(prevProps: Readonly<PropsType>, prevState: Readonly<RootReducerType>,
