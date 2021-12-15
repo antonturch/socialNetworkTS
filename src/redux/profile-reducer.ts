@@ -1,12 +1,11 @@
-import {AddNewMessageType, UpdateNewMessageTextType} from "./dialog-reducer";
 import {Dispatch} from "redux";
 import {profileAPI} from "../api/api";
 import {FormSubmitDataType} from "../components/common/Form";
 
-const ADD_POST = "ADD_POST" as const
-const ADD_NEW_POST_TEXT = "ADD_NEW_POST_TEXT" as const
-const SET_USER_PROFILE = "SET_USER_PROFILE" as const
-const SET_USER_STATUS = "SET_USER_STATUS" as const
+const ADD_POST = "profile/ADD_POST" as const
+const ADD_NEW_POST_TEXT = "profile/ADD_NEW_POST_TEXT" as const
+const SET_USER_PROFILE = "profile/SET_USER_PROFILE" as const
+const SET_USER_STATUS = "profile/SET_USER_STATUS" as const
 
 
 export type PostType = {
@@ -43,6 +42,13 @@ export type ProfilePageType = {
     status: string
 }
 
+export type MyPostsPropsType = {
+    postsElements: Array<any>
+    newPostText: string
+    addPost: (newItemTextForm: FormSubmitDataType) => void
+    addNewPostText: (newPostText: string) => void
+}
+
 const initialState: ProfilePageType = {
     postsData: [
         {id: 1, postText: "My 1st post", likesCount: 12},
@@ -55,33 +61,30 @@ const initialState: ProfilePageType = {
 
 
 export type AddPostActionType = {
-    type: "ADD_POST"
+    type: "profile/ADD_POST"
     newItemTextForm: FormSubmitDataType
 }
 
 export type AddNewPostTextActionType = {
-    type: "ADD_NEW_POST_TEXT"
+    type: "profile/ADD_NEW_POST_TEXT"
     newPostText: string
 }
 
 export type SetUserProfileActionType = {
-    type: "SET_USER_PROFILE"
+    type: "profile/SET_USER_PROFILE"
     profile: any
 }
 
 type SetUserStatusACType = {
-    type: "SET_USER_STATUS"
+    type: "profile/SET_USER_STATUS"
     status: string
 }
 
 export type ActionsType =
     AddPostActionType
     | AddNewPostTextActionType
-    | UpdateNewMessageTextType
-    | AddNewMessageType
     | SetUserProfileActionType
     | SetUserStatusACType
-
 
 export const addPostAC = (newItemTextForm: FormSubmitDataType): AddPostActionType => {
     return {type: ADD_POST, newItemTextForm}
@@ -103,7 +106,6 @@ export const profileReducer = (state = initialState, action: ActionsType): Profi
         case ADD_POST:
             return {
                 ...state,
-                // postsData: [...state.postsData, {id: 1, postText: state.newPostText, likesCount: 0}],
                 postsData: [...state.postsData,
                     {id: 1, postText: action.newItemTextForm.newItemText, likesCount: 0}],
                 newPostText: ""
@@ -120,29 +122,26 @@ export const profileReducer = (state = initialState, action: ActionsType): Profi
 }
 
 export const getProfileThunk = (userId: string) => {
-    return (dispatch: Dispatch) => {
-        profileAPI.getProfile(userId)
-            .then(res => {
-                dispatch(setUserProfileAC(res.data))
-            })
+    return async (dispatch: Dispatch) => {
+        const res = await profileAPI.getProfile(userId)
+        dispatch(setUserProfileAC(res.data))
     }
 }
 
 export const getUserStatusThunk = (userId: string) => {
-    return (dispatch: Dispatch) => {
-        profileAPI.getStatus(userId)
-            .then(res => dispatch(setUserStatusAC(res.data)))
+    return async (dispatch: Dispatch) => {
+        const res = profileAPI.getStatus(userId)
+        //@ts-ignore
+        dispatch(setUserStatusAC(res.data))
     }
 }
 
 export const updateUserStatusThunk = (newStatus: string) => {
-    return (dispatch: Dispatch) => {
-        profileAPI.updateStatus(newStatus)
-            .then(res => {
-                //@ts-ignore
-                if (res.data.resultCode === 0) {
-                    dispatch(setUserStatusAC(newStatus))
-                }
-            })
+    return async (dispatch: Dispatch) => {
+        const res = await profileAPI.updateStatus(newStatus)
+        //@ts-ignore
+        if (res.data.resultCode === 0) {
+            dispatch(setUserStatusAC(newStatus))
+        }
     }
 }

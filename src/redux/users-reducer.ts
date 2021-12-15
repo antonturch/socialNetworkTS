@@ -1,7 +1,11 @@
 import {Dispatch} from "redux";
 import {API} from "../api/api";
 
-const SET_FOLLOWING_IN_PROGRESS = "SET_FOLLOWING_IN_PROGRESS" as const
+const SET_FOLLOWING_IN_PROGRESS = "users/SET_FOLLOWING_IN_PROGRESS" as const
+const SET_FOLLOW = "users/SET_FOLLOW" as const
+const SET_USERS = "users/SET_USERS" as const
+const SET_CURRENT_PAGE = "users/SET_CURRENT_PAGE" as const
+const SET_LOADING = "users/SET_LOADING" as const
 
 export type UserType = {
     name: string
@@ -29,24 +33,24 @@ export type LocationType = {
 }
 
 export type setFollowACType = {
-    type: "SET-FOLLOW"
+    type: "users/SET_FOLLOW"
     userId: number
     isFollow: boolean
 }
 
 export type setUsersACType = {
-    type: "SET-USERS"
+    type: "users/SET_USERS"
     users: UserType[]
     totalUsersCount: number
 }
 
 export type setCurrentPageACType = {
-    type: "SET-CURRENT-PAGE"
+    type: "users/SET_CURRENT_PAGE"
     currentPage: number
 }
 
 export type setLoadingACType = {
-    type: "SET-LOADING"
+    type: "users/SET_LOADING"
     isLoading: boolean
 }
 
@@ -60,7 +64,7 @@ const initState: UsersInitStateType = {
 }
 
 type setFollowingInProgressType = {
-    type: "SET_FOLLOWING_IN_PROGRESS"
+    type: "users/SET_FOLLOWING_IN_PROGRESS"
     userId: number
     isLoading: boolean
 }
@@ -73,29 +77,29 @@ export const setFollowingInProgressAC = (userId: number,
 })
 
 export const setFollowAC = (userId: number, isFollow: boolean): setFollowACType => ({
-        type: "SET-FOLLOW",
+        type: SET_FOLLOW,
         userId,
         isFollow
     }
 )
 
 export const setUsersAC = (users: UserType[], totalUsersCount: number): setUsersACType => ({
-    type: "SET-USERS",
+    type: SET_USERS,
     users,
     totalUsersCount
 })
 
 export const setCurrentPageAC = (currentPage: number): setCurrentPageACType => ({
-    type: "SET-CURRENT-PAGE",
+    type: SET_CURRENT_PAGE,
     currentPage
 })
 
-export const setLoadingAC = (isLoading: boolean): setLoadingACType => ({type: "SET-LOADING", isLoading})
+export const setLoadingAC = (isLoading: boolean): setLoadingACType => ({type: SET_LOADING, isLoading})
 
 export const usersReducer = (state = initState,
                              action: setFollowingInProgressType | setFollowACType | setUsersACType | setCurrentPageACType | setLoadingACType) => {
     switch (action.type) {
-        case "SET-FOLLOW":
+        case SET_FOLLOW:
             return {
                 ...state, users: state.users.map(el => {
                     if (el.id === action.userId) {
@@ -104,11 +108,11 @@ export const usersReducer = (state = initState,
                     return el
                 })
             }
-        case "SET-USERS":
+        case SET_USERS:
             return {...state, users: action.users, totalUsersCount: action.totalUsersCount}
-        case "SET-CURRENT-PAGE":
+        case SET_CURRENT_PAGE:
             return {...state, currentPage: action.currentPage}
-        case "SET-LOADING":
+        case SET_LOADING:
             return {...state, isLoading: action.isLoading}
         case SET_FOLLOWING_IN_PROGRESS:
             return {
@@ -122,38 +126,32 @@ export const usersReducer = (state = initState,
 }
 
 export const getUsersThunk = (currentPage: number, pageSize: number) => {
-    return (dispatch: Dispatch) => {
+    return async (dispatch: Dispatch) => {
         dispatch(setLoadingAC(true))
-        API.getUsers(currentPage, pageSize)
-            .then(data => {
-                    dispatch(setUsersAC(data.items, data.totalCount))
-                    dispatch(setLoadingAC(false))
-                }
-            )
+        const data = await API.getUsers(currentPage, pageSize)
+        dispatch(setUsersAC(data.items, data.totalCount))
+        dispatch(setLoadingAC(false))
     }
 }
 
 export const followThunk = (userId: number, isFollow: boolean) => {
-    return (dispatch: Dispatch) => {
+    return async (dispatch: Dispatch) => {
         dispatch(setFollowingInProgressAC(userId, true))
-        isFollow ?
-            API.unFollow(userId)
-                .then(res => {
-                    // @ts-ignore
-                    if (res.resultCode === 0) {
-                        dispatch(setFollowAC(userId, isFollow))
-                        dispatch(setFollowingInProgressAC(userId, false))
-                    }
-                })
-            :
-            API.follow(userId)
-                .then(res => {
-                    // @ts-ignore
-                    if (res.resultCode === 0) {
-                        dispatch(setFollowAC(userId, isFollow))
-                        dispatch(setFollowingInProgressAC(userId, false))
-                    }
-                })
+        if (isFollow) {
+            const res = await API.unFollow(userId)
+            // @ts-ignore
+            if (res.resultCode === 0) {
+                dispatch(setFollowAC(userId, isFollow))
+                dispatch(setFollowingInProgressAC(userId, false))
+            }
+        } else {
+            const res = await API.follow(userId)
+            // @ts-ignore
+            if (res.resultCode === 0) {
+                dispatch(setFollowAC(userId, isFollow))
+                dispatch(setFollowingInProgressAC(userId, false))
+            }
+        }
     }
 }
 

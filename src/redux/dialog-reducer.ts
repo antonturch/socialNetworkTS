@@ -1,5 +1,7 @@
-import {ActionsType} from "./profile-reducer";
 import {FormSubmitDataType} from "../components/common/Form";
+
+const UPDATE_NEW_MESSAGE_TEXT = "dialog/UPDATE_NEW_MESSAGE_TEXT" as const
+const ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE" as const
 
 export type DialogItemType = {
     id: number
@@ -17,12 +19,26 @@ export type DialogPageType = {
     newMessageText: string
 }
 
-export type UpdateNewMessageTextType = { type: "UPDATE-NEW-MESSAGE-TEXT", newMessageSimbol: string }
+export type DialogPagePropsType = {
+    dialogsData: Array<DialogItemType>
+    messagesData: Array<MessageItemType>
+    newMessageText: string
+    updateNewMessageText: (newMessageText: string) => void
+    addNewMessage: (newItemTextForm: FormSubmitDataType) => void
+    isAuth: boolean
+}
+
 
 export type AddNewMessageType = {
-    type: "ADD-NEW-MESSAGE"
+    type: "ADD_NEW_MESSAGE"
     newItemTextForm: FormSubmitDataType
 }
+export type UpdateNewMessageTextType = {
+    type: "dialog/UPDATE_NEW_MESSAGE_TEXT"
+    newMessageSimbol: string
+}
+
+type ActionsType = AddNewMessageType | UpdateNewMessageTextType
 
 const initialState: DialogPageType = {
     dialogsData: [
@@ -43,17 +59,17 @@ const initialState: DialogPageType = {
 }
 
 export const updateNewMessageTextAC = (newMessageSimbol: string): UpdateNewMessageTextType => {
-    return {type: "UPDATE-NEW-MESSAGE-TEXT", newMessageSimbol}
+    return {type: UPDATE_NEW_MESSAGE_TEXT, newMessageSimbol}
 }
 export const addNewMessageAC = (newItemTextForm: FormSubmitDataType): AddNewMessageType => {
-    return {type: "ADD-NEW-MESSAGE", newItemTextForm}
+    return {type: ADD_NEW_MESSAGE, newItemTextForm}
 }
 
 export const dialogReducer = (state = initialState, action: ActionsType): DialogPageType => {
     switch (action.type) {
-        case "UPDATE-NEW-MESSAGE-TEXT":
+        case UPDATE_NEW_MESSAGE_TEXT:
             return {...state, newMessageText: action.newMessageSimbol}
-        case "ADD-NEW-MESSAGE":
+        case ADD_NEW_MESSAGE:
             if (action.newItemTextForm.newItemText === "") {
                 alert("Please enter your message")
                 return state
@@ -66,7 +82,6 @@ export const dialogReducer = (state = initialState, action: ActionsType): Dialog
                 stateCopy.messagesData = [...state.messagesData, newMessageObj]
                 return {...stateCopy}
             }
-
         default:
             return state
     }

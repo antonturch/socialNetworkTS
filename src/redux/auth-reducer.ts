@@ -2,12 +2,8 @@ import {Dispatch} from "redux";
 import {authAPI} from "../api/api";
 import {stopSubmit} from "redux-form";
 
-const SET_USER_DATA = "SET_USER_DATA" as const
+const SET_USER_DATA = "auth/SET_USER_DATA" as const
 
-type setUserDataAСType = {
-    type: "SET_USER_DATA"
-    payload: any
-}
 
 export type AuthStateType = {
     userId: string | null
@@ -25,10 +21,10 @@ const initState: AuthStateType = {
     isFetching: true,
 }
 
-type AuthActionsType = setUserDataAСType
+type AuthActionsType = ReturnType<typeof setAuthUserData>
 
 export const setAuthUserData = (userId: string | null, email: string | null, login: string | null,
-                                isAuth: boolean): setUserDataAСType => ({
+                                isAuth: boolean) => ({
     type: SET_USER_DATA,
     payload: {
         userId, email, login, isAuth
@@ -45,44 +41,38 @@ export const authReducer = (state = initState, action: AuthActionsType) => {
 }
 
 export const getLoginThunk = () => {
+    return async (dispatch: Dispatch) => {
+        const res = await authAPI.getLogin()
+        //@ts-ignore
+        if (!initState.isAuth && res.resultCode === 0) {
+            //@ts-ignore
+            dispatch(setAuthUserData(res.data.id, res.data.email, res.data.login, true))
+        }
 
-    return (dispatch: Dispatch) => {
-        return authAPI.getLogin()
-            .then(res => {
-                // @ts-ignore
-                if (!initState.isAuth && res.resultCode === 0) {
-                    // @ts-ignore
-                    dispatch(setAuthUserData(res.data.id, res.data.email, res.data.login, true))
-                }
-            })
     }
 }
 
 export const loginThunk = (email: string, password: string, rememberMe: boolean) => {
-    return (dispatch: Dispatch) => {
-        authAPI.login(email, password, rememberMe)
-            .then(res => {
-                // @ts-ignore
-                if (res.data.resultCode === 0) {
-                    // @ts-ignore
-                    dispatch(getLoginThunk())
-                } else {
-                    // @ts-ignore
-                    const errorMessage = res.data.messages[0]
-                    dispatch(stopSubmit("login", {_error: errorMessage}))
-                }
-            })
+    return async (dispatch: Dispatch) => {
+        const res = await authAPI.login(email, password, rememberMe)
+        // @ts-ignore
+        if (res.data.resultCode === 0) {
+            // @ts-ignore
+            dispatch(getLoginThunk())
+        } else {
+            // @ts-ignore
+            const errorMessage = res.data.messages[0]
+            dispatch(stopSubmit("login", {_error: errorMessage}))
+        }
     }
 }
 
 export const logOutThunks = () => {
-    return (dispatch: Dispatch) => {
-        authAPI.logOut()
-            .then(res => {
-                // @ts-ignore
-                if (res.data.resultCode === 0) {
-                    dispatch(setAuthUserData(null, null, null, false))
-                }
-            })
+    return async (dispatch: Dispatch) => {
+        const res = await authAPI.logOut()
+        // @ts-ignore
+        if (res.data.resultCode === 0) {
+            dispatch(setAuthUserData(null, null, null, false))
+        }
     }
 }

@@ -1,10 +1,9 @@
 import React, {ComponentType} from "react";
 import s from "./DialogsPage.module.css"
 import {DialogMessageItem, MessageItem} from "./DialogMessageItem";
-import {DialogPagePropsType} from "../../redux/state";
 import {connect} from "react-redux";
 import {compose, Dispatch} from "redux";
-import {addNewMessageAC, updateNewMessageTextAC} from "../../redux/dialog-reducer";
+import {addNewMessageAC, DialogPagePropsType, updateNewMessageTextAC} from "../../redux/dialog-reducer";
 import {StateType} from "../../redux/redux-store";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {AddItemForm, FormSubmitDataType} from "../common/Form";
