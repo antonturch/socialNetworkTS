@@ -8,7 +8,7 @@ import {StateType} from "../../redux/redux-store";
 import {Redirect} from "react-router-dom";
 import styles from "./Login.module.css"
 
-const maxLengthTenSymbols = maxLengthCreator(20)
+const maxLengthTwentySymbols = maxLengthCreator(20)
 const minLengthOneSymbol = minLengthCreator(1)
 
 type FormDataType = {
@@ -26,7 +26,6 @@ type LoginPropsType = {
 export const Login: FC<LoginPropsType> = ({loginThunk, isAuth}) => {
     const onSubmitHandler = (formData: FormDataType) => {
         loginThunk(formData.email, formData.password, formData.rememberMe)
-
     }
 
     if (isAuth) {
@@ -43,7 +42,7 @@ const LoginForm: FC<InjectedFormProps<FormDataType>> = ({handleSubmit, error}) =
     return (
         <form onSubmit={handleSubmit}>
             <div>
-                <Field validate={[required, maxLengthTenSymbols, minLengthOneSymbol]} type="text"
+                <Field validate={[required, maxLengthTwentySymbols, minLengthOneSymbol]} type="text"
                        name={"email"} placeholder={"your mail"} component={Input}/>
             </div>
             <div>

@@ -12,9 +12,10 @@ import {
 import React, {ComponentType} from "react";
 import "./../../App.css";
 import img from "../common/Img/Preloader.gif"
-import {NavLink} from "react-router-dom";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
+import {User} from "./User";
+import {Paginator} from "./Paginator";
 
 export type UsersPagePropsType = UsersInitStateType & {
     setUsers: (users: UserType[], totalUsersCount: number) => void
@@ -23,10 +24,13 @@ export type UsersPagePropsType = UsersInitStateType & {
     followingInProgress: number[]
     getUsersThunk: (currentPage: number, pageSize: number) => void
     followThunk: (userId: number, isFollow: boolean) => void
+    totalUsersCount: number
+    pageSize: number
 }
 
 export type UsersPresentPropsType = {
-    pagesNumber: number[]
+    totalUsersCount: number
+    pageSize: number
     onChangePage: (usersPage: number) => void
     currentPage: number
     users: UserType[]
@@ -48,15 +52,11 @@ export class UsersPageClass extends React.Component<UsersPagePropsType, RootRedu
     }
 
     render() {
-        const pagesCount = Math.ceil(this.props.totalUsersCount / this.props.pageSize)
-        let pagesNumber: number[] = [];
-        for (let i = 1; i <= pagesCount; i++) {
-            pagesNumber = [...pagesNumber, i]
-        }
+
         return (
-            <UsersPresent users={this.props.users} pagesNumber={pagesNumber}
+            <UsersPresent users={this.props.users} totalUsersCount={this.props.totalUsersCount}
                           onChangePage={this.onChangePage} currentPage={this.props.currentPage}
-                          isLoading={this.props.isLoading}
+                          isLoading={this.props.isLoading} pageSize={this.props.pageSize}
                           setLoader={this.props.setLoader}
                           followingInProgress={this.props.followingInProgress}
                           followThunk={this.props.followThunk}/>
@@ -65,7 +65,8 @@ export class UsersPageClass extends React.Component<UsersPagePropsType, RootRedu
 }
 
 const UsersPresent: React.FC<UsersPresentPropsType> = ({
-                                                           pagesNumber,
+                                                           totalUsersCount,
+                                                           pageSize,
                                                            onChangePage,
                                                            currentPage,
                                                            users,
@@ -77,32 +78,20 @@ const UsersPresent: React.FC<UsersPresentPropsType> = ({
     return (
         <div>
             {isLoading ? <img src={img} alt="wait, loading"/> :
-                <div>{pagesNumber.map(el => <span key={el} onClick={() => {
-                    onChangePage(el)
-                    setLoader(true)
-                }} className={el === currentPage ? "active-page" : ""}>{el}</span>)}
+                <div><Paginator setLoader={setLoader} currentPage={currentPage}
+                                totalUsersCount={totalUsersCount}
+                                onChangePage={onChangePage} pageSize={pageSize}/>
                     <div>
                         <button onClick={() => onChangePage(1)}>Set users</button>
                     </div>
-                    {users.map(el =>
-                        <div key={el.id}>
-                            <NavLink to={`/profile/${el.id}`}>
-                                <div>
-                                    <div>{el.photos.small}</div>
-                                    <div>{el.photos.large}</div>
-                                    <div>{el.name}</div>
-                                </div>
-                            </NavLink>
-                            <button disabled={followingInProgress.some(elem => elem === el.id)}
-                                    onClick={() => followThunk(el.id, el.followed)}>{el.followed ?
-                                "Follow" :
-                                "Unfollow"}</button>
-                        </div>
+                    {users.map(el => <User user={el} followingInProgress={followingInProgress}
+                                           followThunk={followThunk}/>
                     )}
                 </div>}
         </div>
     )
 }
+
 
 const mapStateToProps = (state: StateType) => {
     return {

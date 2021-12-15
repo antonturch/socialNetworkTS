@@ -137,20 +137,12 @@ export const getUsersThunk = (currentPage: number, pageSize: number) => {
 export const followThunk = (userId: number, isFollow: boolean) => {
     return async (dispatch: Dispatch) => {
         dispatch(setFollowingInProgressAC(userId, true))
-        if (isFollow) {
-            const res = await API.unFollow(userId)
-            // @ts-ignore
-            if (res.resultCode === 0) {
-                dispatch(setFollowAC(userId, isFollow))
-                dispatch(setFollowingInProgressAC(userId, false))
-            }
-        } else {
-            const res = await API.follow(userId)
-            // @ts-ignore
-            if (res.resultCode === 0) {
-                dispatch(setFollowAC(userId, isFollow))
-                dispatch(setFollowingInProgressAC(userId, false))
-            }
+        const apiMethod = isFollow ? API.unFollow : API.follow
+        const res = await apiMethod(userId)
+        // @ts-ignore
+        if (res.resultCode === 0) {
+            dispatch(setFollowAC(userId, isFollow))
+            dispatch(setFollowingInProgressAC(userId, false))
         }
     }
 }
