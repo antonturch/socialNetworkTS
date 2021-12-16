@@ -30,14 +30,19 @@ type MapDispatchToPropsType = {
 
 class ProfileContainer extends React.Component<PropsType, RootReducerType> {
 
-    componentDidMount() {
+    updateProfile () {
         let userId = this.props.match.params.userIdUrl ? this.props.match.params.userIdUrl : this.props.authorizedUserId
         this.props.getProfileThunk(userId)
         this.props.getUserStatusThunk(userId)
     }
 
+    componentDidMount() {
+        this.updateProfile()
+    }
+
     componentDidUpdate(prevProps: Readonly<PropsType>, prevState: Readonly<RootReducerType>,
                        snapshot?: any) {
+        this.updateProfile()
         if (prevProps.status !== this.props.status) {
             this.setState({status: this.props.status})
         }

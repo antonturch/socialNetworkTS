@@ -1,7 +1,7 @@
 import {FormSubmitDataType} from "../components/common/Form";
 
-const UPDATE_NEW_MESSAGE_TEXT = "dialog/UPDATE_NEW_MESSAGE_TEXT" as const
-const ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE" as const
+const UPDATE_NEW_MESSAGE_TEXT = "dialog/UPDATE_NEW_MESSAGE_TEXT"
+const ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE"
 
 export type DialogItemType = {
     id: number
@@ -30,11 +30,11 @@ export type DialogPagePropsType = {
 
 
 export type AddNewMessageType = {
-    type: "ADD_NEW_MESSAGE"
+    type: typeof ADD_NEW_MESSAGE
     newItemTextForm: FormSubmitDataType
 }
 export type UpdateNewMessageTextType = {
-    type: "dialog/UPDATE_NEW_MESSAGE_TEXT"
+    type: typeof UPDATE_NEW_MESSAGE_TEXT
     newMessageSimbol: string
 }
 

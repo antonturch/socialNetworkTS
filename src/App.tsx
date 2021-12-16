@@ -15,6 +15,8 @@ import {StateType} from "./redux/redux-store";
 import {initializeApp} from "./redux/app-reducer";
 import img from "./components/common/Img/Preloader.gif"
 
+// @ts-ignore
+// const DialogsPageContainer = React.lazy(() => import("./components/DialogsPage/DialogsPage"))
 
 type AppPropsType = {
     initialized: boolean

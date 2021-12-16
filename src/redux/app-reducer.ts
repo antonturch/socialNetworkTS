@@ -1,7 +1,7 @@
 import {Dispatch} from "redux";
 import {getLoginThunk} from "./auth-reducer";
 
-const INITIALIZED = "app/SET_INITIALIZED" as const
+const INITIALIZED = "app/SET_INITIALIZED"
 
 type initialStateType = {
     initialized: boolean
@@ -16,7 +16,7 @@ export const setInitializeStateAC = () => ({
     type: INITIALIZED
 })
 
-export const appReducer = (state = initialState, action: ActionTypes) => {
+export const appReducer = (state = initialState, action: ActionTypes): initialStateType => {
     switch (action.type) {
         case INITIALIZED:
             return {...state, initialized: true}
