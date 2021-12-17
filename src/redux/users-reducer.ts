@@ -1,11 +1,11 @@
 import {Dispatch} from "redux";
 import {API} from "../api/api";
 
-const SET_FOLLOWING_IN_PROGRESS = "users/SET_FOLLOWING_IN_PROGRESS" as const
-const SET_FOLLOW = "users/SET_FOLLOW" as const
-const SET_USERS = "users/SET_USERS" as const
-const SET_CURRENT_PAGE = "users/SET_CURRENT_PAGE" as const
-const SET_LOADING = "users/SET_LOADING" as const
+const SET_FOLLOWING_IN_PROGRESS = "users/SET_FOLLOWING_IN_PROGRESS"
+const SET_FOLLOW = "users/SET_FOLLOW"
+const SET_USERS = "users/SET_USERS"
+const SET_CURRENT_PAGE = "users/SET_CURRENT_PAGE"
+const SET_LOADING = "users/SET_LOADING"
 
 export type UserType = {
     name: string
@@ -33,24 +33,24 @@ export type LocationType = {
 }
 
 export type setFollowACType = {
-    type: "users/SET_FOLLOW"
+    type: typeof SET_FOLLOW
     userId: number
     isFollow: boolean
 }
 
 export type setUsersACType = {
-    type: "users/SET_USERS"
+    type: typeof SET_USERS
     users: UserType[]
     totalUsersCount: number
 }
 
 export type setCurrentPageACType = {
-    type: "users/SET_CURRENT_PAGE"
+    type: typeof SET_CURRENT_PAGE
     currentPage: number
 }
 
 export type setLoadingACType = {
-    type: "users/SET_LOADING"
+    type: typeof SET_LOADING
     isLoading: boolean
 }
 
@@ -64,7 +64,7 @@ const initState: UsersInitStateType = {
 }
 
 type setFollowingInProgressType = {
-    type: "users/SET_FOLLOWING_IN_PROGRESS"
+    type: typeof SET_FOLLOWING_IN_PROGRESS
     userId: number
     isLoading: boolean
 }

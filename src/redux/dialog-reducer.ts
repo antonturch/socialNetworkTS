@@ -1,7 +1,7 @@
 import {FormSubmitDataType} from "../components/common/Form";
 
 const UPDATE_NEW_MESSAGE_TEXT = "dialog/UPDATE_NEW_MESSAGE_TEXT"
-const ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE"
+const ADD_NEW_MESSAGE = "dialog/ADD_NEW_MESSAGE"
 
 export type DialogItemType = {
     id: number
@@ -71,7 +71,6 @@ export const dialogReducer = (state = initialState, action: ActionsType): Dialog
             return {...state, newMessageText: action.newMessageSimbol}
         case ADD_NEW_MESSAGE:
             if (action.newItemTextForm.newItemText === "") {
-                alert("Please enter your message")
                 return state
             } else {
                 const stateCopy = {...state}

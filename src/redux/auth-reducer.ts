@@ -2,7 +2,7 @@ import {Dispatch} from "redux";
 import {authAPI} from "../api/api";
 import {stopSubmit} from "redux-form";
 
-const SET_USER_DATA = "auth/SET_USER_DATA" as const
+const SET_USER_DATA = "auth/SET_USER_DATA"
 
 
 export type AuthStateType = {
@@ -22,7 +22,12 @@ const initState: AuthStateType = {
 }
 
 type AuthActionsType = ReturnType<typeof setAuthUserData>
-
+// type SetAuthUserDataPayloadType = {
+//     userId: string
+//     email: string
+//     login: string
+//     isAuth: boolean
+// }
 export const setAuthUserData = (userId: string | null, email: string | null, login: string | null,
                                 isAuth: boolean) => ({
     type: SET_USER_DATA,

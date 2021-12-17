@@ -2,10 +2,10 @@ import {Dispatch} from "redux";
 import {profileAPI} from "../api/api";
 import {FormSubmitDataType} from "../components/common/Form";
 
-const ADD_POST = "profile/ADD_POST" as const
-const ADD_NEW_POST_TEXT = "profile/ADD_NEW_POST_TEXT" as const
-const SET_USER_PROFILE = "profile/SET_USER_PROFILE" as const
-const SET_USER_STATUS = "profile/SET_USER_STATUS" as const
+const ADD_POST = "profile/ADD_POST"
+const ADD_NEW_POST_TEXT = "profile/ADD_NEW_POST_TEXT"
+const SET_USER_PROFILE = "profile/SET_USER_PROFILE"
+const SET_USER_STATUS = "profile/SET_USER_STATUS"
 
 
 export type PostType = {
@@ -61,22 +61,22 @@ const initialState: ProfilePageType = {
 
 
 export type AddPostActionType = {
-    type: "profile/ADD_POST"
+    type: typeof ADD_POST
     newItemTextForm: FormSubmitDataType
 }
 
 export type AddNewPostTextActionType = {
-    type: "profile/ADD_NEW_POST_TEXT"
+    type: typeof ADD_NEW_POST_TEXT
     newPostText: string
 }
 
 export type SetUserProfileActionType = {
-    type: "profile/SET_USER_PROFILE"
+    type: typeof SET_USER_PROFILE
     profile: any
 }
 
 type SetUserStatusACType = {
-    type: "profile/SET_USER_STATUS"
+    type: typeof SET_USER_STATUS
     status: string
 }
 

@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import {RootReducerType, StateType} from "../../redux/redux-store";
+import {StateType} from "../../redux/redux-store";
 import {
     followThunk,
     getUsersThunk,
@@ -40,7 +40,7 @@ export type UsersPresentPropsType = {
     followThunk: (userId: number, isFollow: boolean) => void
 }
 
-export class UsersPageClass extends React.Component<UsersPagePropsType, RootReducerType> {
+export class UsersPageClass extends React.Component<UsersPagePropsType> {
 
     componentDidMount = () => {
         this.props.getUsersThunk(1, 8)
