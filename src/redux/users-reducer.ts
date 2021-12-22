@@ -1,5 +1,6 @@
-import {Dispatch} from "redux";
 import {API} from "../api/api";
+import {StateType} from "./redux-store";
+import {ThunkAction} from "redux-thunk";
 
 const SET_FOLLOWING_IN_PROGRESS = "users/SET_FOLLOWING_IN_PROGRESS"
 const SET_FOLLOW = "users/SET_FOLLOW"
@@ -69,6 +70,14 @@ type setFollowingInProgressType = {
     isLoading: boolean
 }
 
+type ActionsType =
+    setFollowingInProgressType
+    | setFollowACType
+    | setUsersACType
+    | setCurrentPageACType
+    | setLoadingACType
+type ThunkType = ThunkAction<Promise<void>, StateType, unknown, ActionsType>
+
 export const setFollowingInProgressAC = (userId: number,
                                          isLoading: boolean): setFollowingInProgressType => ({
     type: SET_FOLLOWING_IN_PROGRESS,
@@ -97,7 +106,7 @@ export const setCurrentPageAC = (currentPage: number): setCurrentPageACType => (
 export const setLoadingAC = (isLoading: boolean): setLoadingACType => ({type: SET_LOADING, isLoading})
 
 export const usersReducer = (state = initState,
-                             action: setFollowingInProgressType | setFollowACType | setUsersACType | setCurrentPageACType | setLoadingACType) => {
+                             action: ActionsType) => {
     switch (action.type) {
         case SET_FOLLOW:
             return {
@@ -125,8 +134,9 @@ export const usersReducer = (state = initState,
     }
 }
 
-export const getUsersThunk = (currentPage: number, pageSize: number) => {
-    return async (dispatch: Dispatch) => {
+export const getUsersThunk = (currentPage: number,
+                              pageSize: number): ThunkType => {
+    return async (dispatch) => {
         dispatch(setLoadingAC(true))
         const data = await API.getUsers(currentPage, pageSize)
         dispatch(setUsersAC(data.items, data.totalCount))
@@ -134,8 +144,8 @@ export const getUsersThunk = (currentPage: number, pageSize: number) => {
     }
 }
 
-export const followThunk = (userId: number, isFollow: boolean) => {
-    return async (dispatch: Dispatch) => {
+export const followThunk = (userId: number, isFollow: boolean): ThunkType => {
+    return async (dispatch) => {
         dispatch(setFollowingInProgressAC(userId, true))
         const apiMethod = isFollow ? API.unFollow : API.follow
         const res = await apiMethod(userId)

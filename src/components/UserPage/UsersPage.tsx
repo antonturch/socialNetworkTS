@@ -17,26 +17,19 @@ import {compose} from "redux";
 import {User} from "./User";
 import {Paginator} from "./Paginator";
 
-export type UsersPagePropsType = UsersInitStateType & {
+export type UsersPresentPropsType = UsersInitStateType & {
+    onChangePage: (usersPage: number) => void
+    setLoader: (isLoading: boolean) => void
+    followThunk: (userId: number, isFollow: boolean) => void
+}
+
+type UsersPagePropsType = UsersInitStateType & MapDispatchToPropsType
+
+type MapDispatchToPropsType = {
     setUsers: (users: UserType[], totalUsersCount: number) => void
     setCurrentPage: (currentPage: number) => void
     setLoader: (isLoading: boolean) => void
-    followingInProgress: number[]
     getUsersThunk: (currentPage: number, pageSize: number) => void
-    followThunk: (userId: number, isFollow: boolean) => void
-    totalUsersCount: number
-    pageSize: number
-}
-
-export type UsersPresentPropsType = {
-    totalUsersCount: number
-    pageSize: number
-    onChangePage: (usersPage: number) => void
-    currentPage: number
-    users: UserType[]
-    isLoading: boolean
-    setLoader: (isLoading: boolean) => void
-    followingInProgress: number[]
     followThunk: (userId: number, isFollow: boolean) => void
 }
 
@@ -92,8 +85,7 @@ const UsersPresent: React.FC<UsersPresentPropsType> = ({
     )
 }
 
-
-const mapStateToProps = (state: StateType) => {
+const mapStateToProps = (state: StateType): UsersInitStateType => {
     return {
         users: state.usersPage.users,
         pageSize: state.usersPage.pageSize,
@@ -104,15 +96,15 @@ const mapStateToProps = (state: StateType) => {
     }
 }
 
-
 export const UsersPageContainer = compose<ComponentType>(
-    connect(mapStateToProps, {
-        setUsers: setUsersAC,
-        setCurrentPage: setCurrentPageAC,
-        setLoader: setLoadingAC,
-        getUsersThunk: getUsersThunk,
-        followThunk: followThunk,
-    }),
+    connect<UsersInitStateType, MapDispatchToPropsType, {}, StateType>(
+        mapStateToProps, {
+            setUsers: setUsersAC,
+            setCurrentPage: setCurrentPageAC,
+            setLoader: setLoadingAC,
+            getUsersThunk: getUsersThunk,
+            followThunk: followThunk,
+        }),
     withAuthRedirect
 )(UsersPageClass)
 

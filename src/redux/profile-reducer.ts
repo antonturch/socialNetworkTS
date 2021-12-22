@@ -1,6 +1,7 @@
-import {Dispatch} from "redux";
 import {profileAPI} from "../api/api";
 import {FormSubmitDataType} from "../components/common/Form";
+import {ThunkAction} from "redux-thunk";
+import {StateType} from "./redux-store";
 
 const ADD_POST = "profile/ADD_POST"
 const ADD_NEW_POST_TEXT = "profile/ADD_NEW_POST_TEXT"
@@ -85,6 +86,8 @@ export type ActionsType =
     | AddNewPostTextActionType
     | SetUserProfileActionType
     | SetUserStatusACType
+type ThunkType = ThunkAction<Promise<void>, StateType, unknown, ActionsType>
+
 
 export const addPostAC = (newItemTextForm: FormSubmitDataType): AddPostActionType => {
     return {type: ADD_POST, newItemTextForm}
@@ -92,7 +95,6 @@ export const addPostAC = (newItemTextForm: FormSubmitDataType): AddPostActionTyp
 export const addNewPostTextAC = (newPostText: string): AddNewPostTextActionType => {
     return {type: ADD_NEW_POST_TEXT, newPostText}
 }
-
 export const setUserProfileAC = (profile: ProfileApiType): SetUserProfileActionType => {
     return {type: SET_USER_PROFILE, profile}
 }
@@ -121,23 +123,23 @@ export const profileReducer = (state = initialState, action: ActionsType): Profi
     }
 }
 
-export const getProfileThunk = (userId: string) => {
-    return async (dispatch: Dispatch) => {
+export const getProfileThunk = (userId: string): ThunkType => {
+    return async (dispatch) => {
         const res = await profileAPI.getProfile(userId)
         dispatch(setUserProfileAC(res.data))
     }
 }
 
-export const getUserStatusThunk = (userId: string) => {
-    return async (dispatch: Dispatch) => {
+export const getUserStatusThunk = (userId: string): ThunkType => {
+    return async (dispatch) => {
         const res = profileAPI.getStatus(userId)
         //@ts-ignore
         dispatch(setUserStatusAC(res.data))
     }
 }
 
-export const updateUserStatusThunk = (newStatus: string) => {
-    return async (dispatch: Dispatch) => {
+export const updateUserStatusThunk = (newStatus: string): ThunkType => {
+    return async (dispatch) => {
         const res = await profileAPI.updateStatus(newStatus)
         //@ts-ignore
         if (res.data.resultCode === 0) {
