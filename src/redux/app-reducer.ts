@@ -1,42 +1,34 @@
 import {Dispatch} from "redux";
 import {getLoginThunk} from "./auth-reducer";
-import {ThunkAction} from "redux-thunk";
-import {StateType} from "./redux-store";
-
-const INITIALIZED = "app/SET_INITIALIZED"
+import {InferActionsType, ThunkType} from "./redux-store";
 
 type initialStateType = {
     initialized: boolean
 }
 
-type ActionsType = ReturnType<typeof setInitializeStateAC>
+type ActionsType = InferActionsType<typeof actionsApp>
 
 const initialState: initialStateType = {
     initialized: false
 }
-export const setInitializeStateAC = () => ({
-    type: INITIALIZED
-})
-type ThunkType = ThunkAction<Promise<void>, StateType, unknown, ActionsType>
+export const actionsApp = {
+    setInitializeStateAC: () => ({
+        type: "app/SET_INITIALIZED"
+    } as const)
+}
 
 export const appReducer = (state = initialState, action: ActionsType): initialStateType => {
     switch (action.type) {
-        case INITIALIZED:
+        case "app/SET_INITIALIZED":
             return {...state, initialized: true}
         default:
             return state
     }
 }
 
-// export const initializeApp = () => {
-//     return (dispatch: Dispatch) => {
-//         // @ts-ignore
-//         dispatch(getLoginThunk()).then(() => dispatch(setInitializeStateAC()))
-//     }
-// }
-export const initializeApp = (): ThunkType => {
+export const initializeApp = (): ThunkType<ActionsType> => {
     return async (dispatch: Dispatch) => {
         // @ts-ignore
-        dispatch(getLoginThunk()).then(() => dispatch(setInitializeStateAC()))
+        dispatch(getLoginThunk()).then(() => dispatch(actionsApp.setInitializeStateAC()))
     }
 }

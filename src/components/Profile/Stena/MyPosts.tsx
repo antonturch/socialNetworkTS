@@ -1,6 +1,6 @@
 import React from "react";
 import {Post} from "./Post";
-import {addNewPostTextAC, addPostAC, MyPostsPropsType} from "../../../redux/profile-reducer";
+import {actionsProfile, MyPostsPropsType} from "../../../redux/profile-reducer";
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
 import {StateType} from "../../../redux/redux-store";
@@ -43,10 +43,10 @@ const mapStateToProps = (state: StateType) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         addPost: (newItemTextForm: FormSubmitDataType) => {
-            dispatch(addPostAC(newItemTextForm))
+            dispatch(actionsProfile.addPostAC(newItemTextForm))
         },
         addNewPostText: (newPostTest: string) => {
-            dispatch(addNewPostTextAC(newPostTest))
+            dispatch(actionsProfile.addNewPostTextAC(newPostTest))
         }
     }
 }

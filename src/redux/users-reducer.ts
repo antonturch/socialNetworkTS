@@ -1,6 +1,5 @@
-import {API} from "../api/api";
-import {InferActionsType, StateType} from "./redux-store";
-import {ThunkAction} from "redux-thunk";
+import {InferActionsType, ThunkType} from "./redux-store";
+import {usersApi} from "../api/users-api";
 
 
 export type UserType = {
@@ -38,10 +37,9 @@ const initState: UsersInitStateType = {
 }
 
 
-type ActionsType = InferActionsType<typeof actions>
-type ThunkType = ThunkAction<Promise<void>, StateType, unknown, ActionsType>
+type ActionsType = InferActionsType<typeof actionsUsers>
 
-export const actions = {
+export const actionsUsers = {
     setFollowingInProgressAC: (userId: number,
                                isLoading: boolean) => ({
         type: "SET_FOLLOWING_IN_PROGRESS",
@@ -95,24 +93,24 @@ export const usersReducer = (state = initState,
 }
 
 export const getUsersThunk = (currentPage: number,
-                              pageSize: number): ThunkType => {
+                              pageSize: number): ThunkType<ActionsType> => {
     return async (dispatch) => {
-        dispatch(actions.setLoadingAC(true))
-        const data = await API.getUsers(currentPage, pageSize)
-        dispatch(actions.setUsersAC(data.items, data.totalCount))
-        dispatch(actions.setLoadingAC(false))
+        dispatch(actionsUsers.setLoadingAC(true))
+        const data = await usersApi.getUsers(currentPage, pageSize)
+        dispatch(actionsUsers.setUsersAC(data.items, data.totalCount))
+        dispatch(actionsUsers.setLoadingAC(false))
     }
 }
 
-export const followThunk = (userId: number, isFollow: boolean): ThunkType => {
+export const followThunk = (userId: number, isFollow: boolean): ThunkType<ActionsType> => {
     return async (dispatch) => {
-        dispatch(actions.setFollowingInProgressAC(userId, true))
-        const apiMethod = isFollow ? API.unFollow : API.follow
+        dispatch(actionsUsers.setFollowingInProgressAC(userId, true))
+        const apiMethod = isFollow ? usersApi.unFollow : usersApi.follow
         const res = await apiMethod(userId)
         // @ts-ignore
         if (res.resultCode === 0) {
-            dispatch(actions.setFollowAC(userId, isFollow))
-            dispatch(actions.setFollowingInProgressAC(userId, false))
+            dispatch(actionsUsers.setFollowAC(userId, isFollow))
+            dispatch(actionsUsers.setFollowingInProgressAC(userId, false))
         }
     }
 }

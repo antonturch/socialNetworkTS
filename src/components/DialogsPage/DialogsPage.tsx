@@ -3,7 +3,7 @@ import s from "./DialogsPage.module.css"
 import {DialogMessageItem, MessageItem} from "./DialogMessageItem";
 import {connect} from "react-redux";
 import {compose, Dispatch} from "redux";
-import {addNewMessageAC, DialogPagePropsType, updateNewMessageTextAC} from "../../redux/dialog-reducer";
+import {actionsDialog, DialogPagePropsType} from "../../redux/dialog-reducer";
 import {StateType} from "../../redux/redux-store";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {AddItemForm, FormSubmitDataType} from "../common/Form";
@@ -51,10 +51,10 @@ const mapStateToProps = (state: StateType) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         updateNewMessageText: (newMessageText: string) => {
-            dispatch(updateNewMessageTextAC(newMessageText))
+            dispatch(actionsDialog.updateNewMessageTextAC(newMessageText))
         },
         addNewMessage: (newItemTextForm: FormSubmitDataType) => {
-            dispatch(addNewMessageAC(newItemTextForm))
+            dispatch(actionsDialog.addNewMessageAC(newItemTextForm))
         }
     }
 }
