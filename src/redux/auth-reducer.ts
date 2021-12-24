@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {authAPI} from "../api/api";
+import {authAPI, ResultCodesEnum} from "../api/api";
 import {stopSubmit} from "redux-form";
 import {ThunkAction} from "redux-thunk";
 import {StateType} from "./redux-store";
@@ -54,7 +54,7 @@ export const getLoginThunk = (): ThunkType => {
     return async (dispatch) => {
         const res = await authAPI.getLogin()
         //@ts-ignore
-        if (!initState.isAuth && res.resultCode === 0) {
+        if (!initState.isAuth && res.resultCode === ResultCodesEnum.Success) {
             //@ts-ignore
             dispatch(setAuthUserData(res.data.id, res.data.email, res.data.login, true))
         }
@@ -66,12 +66,12 @@ export const loginThunk = (email: string, password: string, rememberMe: boolean)
     return async (dispatch) => {
         const res = await authAPI.login(email, password, rememberMe)
         // @ts-ignore
-        if (res.data.resultCode === 0) {
+        if (res.resultCode === ResultCodesEnum.Success) {
             // @ts-ignore
             dispatch(getLoginThunk())
         } else {
             // @ts-ignore
-            const errorMessage = res.data.messages[0]
+            const errorMessage = res.messages[0]
             dispatch(stopSubmit("login", {_error: errorMessage}))
         }
     }

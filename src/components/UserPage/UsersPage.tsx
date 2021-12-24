@@ -1,11 +1,9 @@
 import {connect} from "react-redux";
 import {StateType} from "../../redux/redux-store";
 import {
+    actions,
     followThunk,
     getUsersThunk,
-    setCurrentPageAC,
-    setLoadingAC,
-    setUsersAC,
     UsersInitStateType,
     UserType
 } from "../../redux/users-reducer";
@@ -99,9 +97,9 @@ const mapStateToProps = (state: StateType): UsersInitStateType => {
 export const UsersPageContainer = compose<ComponentType>(
     connect<UsersInitStateType, MapDispatchToPropsType, {}, StateType>(
         mapStateToProps, {
-            setUsers: setUsersAC,
-            setCurrentPage: setCurrentPageAC,
-            setLoader: setLoadingAC,
+            setUsers: actions.setUsersAC,
+            setCurrentPage: actions.setCurrentPageAC,
+            setLoader: actions.setLoadingAC,
             getUsersThunk: getUsersThunk,
             followThunk: followThunk,
         }),

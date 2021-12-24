@@ -3,7 +3,7 @@ import {FC} from "react";
 import {Input} from "../common/TextFields/TextField";
 import {maxLengthCreator, minLengthCreator, required} from "../../utils/validators/validators";
 import {connect} from "react-redux";
-import {loginThunk, logOutThunks} from "../../redux/auth-reducer";
+import {loginThunk} from "../../redux/auth-reducer";
 import {StateType} from "../../redux/redux-store";
 import {Redirect} from "react-router-dom";
 import styles from "./Login.module.css"
@@ -21,6 +21,12 @@ type LoginPropsType = {
     loginThunk: (email: string, password: string, rememberMe: boolean) => void
     logOutThunks: () => void
     isAuth: boolean
+}
+type MapStateToPropsType = {
+    isAuth: boolean
+}
+type MapDispatchToPropsType = {
+    loginThunk: (email: string, password: string, rememberMe: boolean) => void
 }
 
 export const Login: FC<LoginPropsType> = ({loginThunk, isAuth}) => {
@@ -60,10 +66,11 @@ const LoginForm: FC<InjectedFormProps<FormDataType>> = ({handleSubmit, error}) =
 }
 const LoginFormRedux = reduxForm<FormDataType>({form: "login"})(LoginForm)
 
-const mapStateToProps = (state: StateType) => {
+const mapStateToProps = (state: StateType): MapStateToPropsType => {
     return {
         isAuth: state.auth.isAuth
     }
 }
 
-export const LoginContainer = connect(mapStateToProps, {loginThunk, logOutThunks})(Login)
+export const LoginContainer = connect<MapStateToPropsType, MapDispatchToPropsType, {}, StateType>(
+    mapStateToProps, {loginThunk})(Login)
