@@ -21,10 +21,7 @@ export type DialogPageType = {
 export type DialogPagePropsType = {
     dialogsData: Array<DialogItemType>
     messagesData: Array<MessageItemType>
-    newMessageText: string
-    updateNewMessageText: (newMessageText: string) => void
     addNewMessage: (newItemTextForm: FormSubmitDataType) => void
-    isAuth: boolean
 }
 
 export const actionsDialog = {

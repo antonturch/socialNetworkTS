@@ -19,9 +19,8 @@ const rootReducer = combineReducers({
 export type RootReducerType = typeof rootReducer
 export type StateType = ReturnType<RootReducerType>
 
-type PropertiesTypes<T> = T extends { [key: string]: infer U } ? U : never
 
-export type InferActionsType<T extends { [key: string]: (...args: any[]) => any }> = ReturnType<PropertiesTypes<T>>
+export type InferActionsType<T> = T extends { [key: string]: (...args: any[]) => infer U } ? U : never
 export type ThunkType<A extends Action> = ThunkAction<Promise<void>, StateType, unknown, A>
 
 // export const store = createStore(rootReducer, applyMiddleware(thunk))

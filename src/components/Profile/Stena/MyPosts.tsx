@@ -1,17 +1,21 @@
 import React from "react";
 import {Post} from "./Post";
-import {actionsProfile, MyPostsPropsType} from "../../../redux/profile-reducer";
+import {actionsProfile, PostType} from "../../../redux/profile-reducer";
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
 import {StateType} from "../../../redux/redux-store";
 import {AddItemForm, FormSubmitDataType} from "../../common/Form";
 
+export type MyPostsPropsType = {
+    postsElements: Array<PostType>
+    // newPostText: string
+    addPost: (newItemTextForm: FormSubmitDataType) => void
+    // addNewPostText: (newPostText: string) => void
+}
 
 export const MyPosts: React.FC<MyPostsPropsType> = ({
                                                         postsElements,
                                                         addPost,
-                                                        addNewPostText,
-                                                        newPostText
                                                     }) => {
     const postsElements1 = postsElements.map(
         (el) => <Post postText={el.postText} likesCount={el.likesCount}/>)

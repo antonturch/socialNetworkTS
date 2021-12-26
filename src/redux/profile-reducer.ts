@@ -37,12 +37,6 @@ export type ProfilePageType = {
     status: string
 }
 
-export type MyPostsPropsType = {
-    postsElements: Array<any>
-    newPostText: string
-    addPost: (newItemTextForm: FormSubmitDataType) => void
-    addNewPostText: (newPostText: string) => void
-}
 
 const initialState: ProfilePageType = {
     postsData: [

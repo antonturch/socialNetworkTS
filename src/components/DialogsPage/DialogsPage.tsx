@@ -2,7 +2,7 @@ import React, {ComponentType} from "react";
 import s from "./DialogsPage.module.css"
 import {DialogMessageItem, MessageItem} from "./DialogMessageItem";
 import {connect} from "react-redux";
-import {compose, Dispatch} from "redux";
+import {compose} from "redux";
 import {actionsDialog, DialogPagePropsType} from "../../redux/dialog-reducer";
 import {StateType} from "../../redux/redux-store";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
@@ -12,11 +12,8 @@ import {AddItemForm, FormSubmitDataType} from "../common/Form";
 export const DialogsPage: React.FC<DialogPagePropsType> = ({
                                                                dialogsData,
                                                                messagesData,
-                                                               newMessageText,
-                                                               updateNewMessageText,
                                                                addNewMessage,
                                                            }) => {
-
 
     const dialogElements = dialogsData.map((el) => <DialogMessageItem id={el.id} name={el.name}/>);
 
@@ -48,18 +45,8 @@ const mapStateToProps = (state: StateType) => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        updateNewMessageText: (newMessageText: string) => {
-            dispatch(actionsDialog.updateNewMessageTextAC(newMessageText))
-        },
-        addNewMessage: (newItemTextForm: FormSubmitDataType) => {
-            dispatch(actionsDialog.addNewMessageAC(newItemTextForm))
-        }
-    }
-}
 
 export const DialogsPageContainer = compose<ComponentType>(
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(mapStateToProps, {addNewMessage: actionsDialog.addNewMessageAC}),
     withAuthRedirect,
-    )(DialogsPage)
+)(DialogsPage)
